@@ -1,0 +1,8 @@
+#!/bin/bash
+mysql_install_db --user=bugzilla --basedir=/usr
+nohup sh -c mysqld &
+pid=$!
+mysql_upgrade
+mysqladmin -u root password `cat /bugzilla/passwd`
+mysql --user root --password `cat /bugzilla/passwd` -e "GRANT ALL PRIVILEGES ON bugs.* TO bugs@localhost IDENTIFIED BY 'bugs'"
+kill $pid
