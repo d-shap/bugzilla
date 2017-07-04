@@ -1,0 +1,10 @@
+#!/bin/bash
+docker run \
+    --rm \
+    --name bugzilla \
+    -d \
+    -v /bugzilla/database:/bugzilla/database \
+    -v /var/log/bugzilla:/var/log/apache2 \
+    -v /var/log/bugzilla:/var/log/mysql \
+    -p 8008:8008 \
+        -it bugzilla /bin/bash
