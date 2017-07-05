@@ -1,3 +1,10 @@
 #!/bin/bash
+if [ ! -d /bugzilla/database/mysql ] || [ ! -d /bugzilla/database/performance_schema ];
+then
+    mysql_install_db
+fi
+
+sed -i "s|\$db_pass.*|\$db_pass = '"$DB_PASSWORD"';|" /var/www/html/${GUEST_APP_NAME}/localconfig
+
 mysqld
 /usr/sbin/apache2ctl -D FOREGROUND
