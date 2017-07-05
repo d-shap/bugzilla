@@ -10,6 +10,9 @@ ARG         downloadname=bugzilla-5.0.3
 ENV         DEBIAN_FRONTEND noninteractive
 ENV         APACHE_RUN_USER bugzilla
 ENV         APACHE_RUN_GROUP bugzilla
+ENV         GUEST_APP_NAME $guestappname
+
+COPY        . /tmp
 
 # Install packages
 RUN         apt-get update && \
@@ -61,8 +64,7 @@ RUN         apt-get update && \
                 graphviz \
                 python-sphinx \
                 rst2pdf \
-                wget \
-                vim
+                wget
 
 # Create user and group
 RUN         groupadd -g $hostgid bugzilla && \
@@ -72,19 +74,34 @@ RUN         groupadd -g $hostgid bugzilla && \
 RUN         mkdir /bugzilla && \
             chown bugzilla:bugzilla /bugzilla
 
-COPY        init /bugzilla
-COPY        startup /bugzilla
-COPY        bugzilla.conf /etc/apache2/sites-available
-
 # Configure MySQL
-RUN         sed -i 's|user.*|user            = bugzilla|' /etc/mysql/my.cnf && \
+RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
+            sed -i 's|user.*|user            = bugzilla|' /etc/mysql/my.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/database|' /etc/mysql/my.cnf && \
-            sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/my.cnf && \
+            sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
             sed -i 's|myisam-recover.*|myisam-recover-options  = BACKUP|' /etc/mysql/my.cnf && \
-            sed -i '\|\[mysqld\]|a ft_min_word_len         = 2' /etc/mysql/my.cnf && \
-            chown -R bugzilla:bugzilla /var/run/mysqld && \
-            chown -R bugzilla:bugzilla /var/log/mysql
+            sed -i 's|log_error.*|log_error                = /var/log/mysql/mysql_error.log|' /etc/mysql/my.cnf && \
+            sed -i '\|\[mysqld_safe\]|a log_error       = /var/log/mysql/mysql_error.log' /etc/mysql/my.cnf && \
+            sed -i 's|syslog.*|# syslog|' /etc/mysql/conf.d/mysqld_safe_syslog.cnf && \
+            rm -rf /var/lib/mysql/mysql && \
+            rm -rf /var/lib/mysql/performance_schema && \
+            chown -R bugzilla:bugzilla /var/log/mysql && \
+            chown -R bugzilla:bugzilla /var/run/mysqld
+
+# Configure apache
+RUN         sed -i 's|:80>|:'"$guestport"'>|' /etc/apache2/sites-available/000-default.conf && \
+            sed -i 's|#ServerName www.example.com|ServerName localhost|' /etc/apache2/sites-available/000-default.conf && \
+            mv /tmp/bugzilla.conf /etc/apache2/sites-available && \
+            sed -i 's|/guestappname|/'"$guestappname"'|' /etc/apache2/sites-available/bugzilla.conf && \
+            sed -i 's|Listen 80|Listen '"$guestport"'|' /etc/apache2/ports.conf && \
+            echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
+            a2enconf servername && \
+            a2enmod cgi expires headers rewrite && \
+            a2ensite bugzilla && \
+            chown -R bugzilla:bugzilla /var/log/apache2 && \
+            chown -R bugzilla:bugzilla /var/lock/apache2 && \
+            chown -R bugzilla:bugzilla /var/run/apache2
 
 # Configure bugzilla
 RUN         cd ~ && \
@@ -92,26 +109,22 @@ RUN         cd ~ && \
             tar xzf ${downloadname}.tar.gz -C /var/www/html && \
             rm ${downloadname}.tar.gz && \
             mv /var/www/html/${downloadname} /var/www/html/${guestappname} && \
+            chown -R bugzilla:bugzilla /var/www/html/${guestappname} && \
             cd /var/www/html/${guestappname} && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${guestappname}/checksetup.pl && \
             sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${guestappname}/localconfig && \
-            sed -i "s|\$db_pass.*|\$db_pass = 'bugs';|" /var/www/html/${guestappname}/localconfig
+            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${guestappname}/localconfig && \
+            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${guestappname}/localconfig
 
-# Configure apache
-RUN         sed -i 's|:80>|:'"$guestport"'>|' /etc/apache2/sites-available/000-default.conf && \
-            sed -i 's|#ServerName www.example.com|ServerName localhost|' /etc/apache2/sites-available/000-default.conf && \
-            sed -i 's|/guestappname|/'"$guestappname"'|' /etc/apache2/sites-available/bugzilla.conf && \
-            sed -i 's|Listen 80|Listen '"$guestport"'|' /etc/apache2/ports.conf && \
-            echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
-            a2enconf servername && \
-            a2enmod cgi expires headers rewrite && \
-            a2ensite bugzilla && \
-            chown -R bugzilla:bugzilla /var/run/apache2 && \
-            chown -R bugzilla:bugzilla /var/log/apache2
-
-# Grant permits for helper scripts
-RUN         chmod a+x /bugzilla/init && \
+# Configure helper scripts
+RUN         mv /tmp/setupDatabaseRootPassword /bugzilla && \
+            chmod a+x /bugzilla/setupDatabaseRootPassword && \
+            mv /tmp/setupDatabaseUserPassword /bugzilla && \
+            chmod a+x /bugzilla/setupDatabaseUserPassword && \
+            mv /tmp/createDatabase /bugzilla && \
+            chmod a+x /bugzilla/createDatabase && \
+            mv /tmp/startup /bugzilla && \
             chmod a+x /bugzilla/startup
 
 USER        bugzilla
