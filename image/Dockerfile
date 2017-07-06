@@ -77,15 +77,14 @@ RUN         mkdir /bugzilla && \
 # Configure MySQL
 RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             sed -i 's|user.*|user            = bugzilla|' /etc/mysql/my.cnf && \
-            sed -i 's|datadir.*|datadir         = /bugzilla/database|' /etc/mysql/my.cnf && \
+            sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/my.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/my.cnf && \
             sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
             sed -i 's|myisam-recover.*|myisam-recover-options  = BACKUP|' /etc/mysql/my.cnf && \
             sed -i 's|log_error.*|log_error                = /var/log/mysql/mysql_error.log|' /etc/mysql/my.cnf && \
             sed -i '\|\[mysqld_safe\]|a log_error       = /var/log/mysql/mysql_error.log' /etc/mysql/my.cnf && \
             sed -i 's|syslog.*|# syslog|' /etc/mysql/conf.d/mysqld_safe_syslog.cnf && \
-            rm -rf /var/lib/mysql/mysql && \
-            rm -rf /var/lib/mysql/performance_schema && \
+            rm -rf /var/lib/mysql && \
             chown -R bugzilla:bugzilla /var/log/mysql && \
             chown -R bugzilla:bugzilla /var/run/mysqld
 
@@ -109,23 +108,32 @@ RUN         cd ~ && \
             tar xzf ${downloadname}.tar.gz -C /var/www/html && \
             rm ${downloadname}.tar.gz && \
             mv /var/www/html/${downloadname} /var/www/html/${guestappname} && \
+            rm -rf /var/www/html/${guestappname}/data && \
+            ln -s /bugzilla/data /var/www/html/${guestappname}/data && \
             chown -R bugzilla:bugzilla /var/www/html/${guestappname} && \
             cd /var/www/html/${guestappname} && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${guestappname}/checksetup.pl && \
             sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${guestappname}/localconfig && \
+            sed -i "s|\$db_pass.*|\$db_pass = \$ENV{'DB_USER_PASSWORD'};|" /var/www/html/${guestappname}/localconfig && \
             sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${guestappname}/localconfig && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${guestappname}/localconfig
 
 # Configure helper scripts
 RUN         mv /tmp/setupDatabaseRootPassword /bugzilla && \
             chmod a+x /bugzilla/setupDatabaseRootPassword && \
+            mv /tmp/changeDatabaseRootPassword /bugzilla && \
+            chmod a+x /bugzilla/changeDatabaseRootPassword && \
             mv /tmp/setupDatabaseUserPassword /bugzilla && \
             chmod a+x /bugzilla/setupDatabaseUserPassword && \
+            mv /tmp/changeDatabaseUserPassword /bugzilla && \
+            chmod a+x /bugzilla/changeDatabaseUserPassword && \
             mv /tmp/createDatabase /bugzilla && \
             chmod a+x /bugzilla/createDatabase && \
             mv /tmp/startup /bugzilla && \
-            chmod a+x /bugzilla/startup
+            chmod a+x /bugzilla/startup && \
+            mv /tmp/shutdown /bugzilla && \
+            chmod a+x /bugzilla/shutdown
 
 USER        bugzilla
 
