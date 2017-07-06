@@ -1,10 +1,10 @@
 #!/bin/bash
-if [ ! -d /bugzilla/database/mysql ] || [ ! -d /bugzilla/database/performance_schema ];
+if [ ! -d /bugzilla/database/mysql ];
 then
     mysql_install_db
 fi
 
-sed -i "s|\$db_pass.*|\$db_pass = '"$DB_PASSWORD"';|" /var/www/html/${GUEST_APP_NAME}/localconfig
+trap /bugzilla/shutdown TERM
 
-mysqld
+mysqld_safe --bind-address=0.0.0.0 &
 /usr/sbin/apache2ctl -D FOREGROUND
