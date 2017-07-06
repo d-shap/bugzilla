@@ -1,0 +1,2 @@
+#!/bin/bash
+mysqladmin --user=root --password="$DB_ROOT_PASSWORD" shutdown
