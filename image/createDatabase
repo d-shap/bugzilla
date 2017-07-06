@@ -1,3 +1,3 @@
 #!/bin/bash
 /var/www/html/$GUEST_APP_NAME/checksetup.pl
-mysql --user=root --password="$1" -e "USE bugs; ALTER TABLE attachments AVG_ROW_LENGTH=1000000, MAX_ROWS=20000;"
+mysql --user=root --password="$DB_ROOT_PASSWORD" -e "USE bugs; ALTER TABLE attachments AVG_ROW_LENGTH=1000000, MAX_ROWS=20000;"
