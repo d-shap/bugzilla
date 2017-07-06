@@ -3,8 +3,11 @@ docker run \
     --rm \
     --name bugzilla \
     -d \
-    -v /bugzilla/database:/bugzilla/database \
+    -v /bugzilla/db:/bugzilla/db \
+    -v /bugzilla/data:/bugzilla/data \
     -v /var/log/bugzilla:/var/log/apache2 \
     -v /var/log/bugzilla:/var/log/mysql \
+    -e DB_ROOT_PASSWORD=some_password \
+    -e DB_USER_PASSWORD=some_password \
     -p 8008:8008 \
-        -it bugzilla /bin/bash
+        bugzilla
