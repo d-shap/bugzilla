@@ -4,6 +4,8 @@ then
     mysql_install_db
 fi
 
+sed -i "s|\$db_pass.*|\$db_pass = '"$DB_USER_PASSWORD"';|" /var/www/html/${GUEST_APP_NAME}/localconfig
+
 trap /bugzilla/shutdown TERM
 
 mysqld_safe --bind-address=0.0.0.0 &
