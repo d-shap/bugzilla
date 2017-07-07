@@ -5,9 +5,10 @@ Docker image for bugzilla web server.
 Container runs as non-root user. This user owns bugzilla process and owns bugzilla database.
 
 To run container next volumes should be mapped
-* folder for mysql database
+* folder for SQL database
 * folder for bugzilla data, such as local stored attachments (Big Files)
 * log folder
+* backup folder
 
 Installation
 ------------
@@ -26,7 +27,7 @@ Execute **build**
 sudo ./build bugzilla bugzilla
 ```
 
-Create folder for bugzilla database
+Create folders for bugzilla database
 ```
 sudo mkdir /bugzilla
 ```
@@ -42,12 +43,20 @@ Create folder for logs
 sudo mkdir /var/log/bugzilla
 ```
 
+Create folder for backups
+```
+sudo mkdir /var/backups/bugzilla
+```
+
 Grant permit to all folders
 ```
 sudo chown -R bugzilla:bugzilla /bugzilla
 ```
 ```
 sudo chown bugzilla:bugzilla /var/log/bugzilla
+```
+```
+sudo chown bugzilla:bugzilla /var/backups/bugzilla
 ```
 
 Copy **etc/init.d/bugzilla** to **/etc/init.d** folder
@@ -140,7 +149,7 @@ sudo service bugzilla start
 
 Run the following command
 ```
-sudo bugzillautil changeUserPassword old_password
+sudo bugzillautil changeRootPassword old_password
 ```
 
 ### Change database password for bugzilla user
@@ -166,6 +175,26 @@ Run the following command
 sudo bugzillautil changeUserPassword
 ```
 
+### Backup
+Run the following command
+```
+sudo bugzillautil backupDatabase backup_file_name
+```
+
+MySQL dump file will be created in bugzilla backup folder (**/var/backups/bugzilla**) with the name **backup_file_name**
+
+Also backup bugzilla data folder (**/bugzilla/data**)
+
+### Restore
+Place MySQL dump file to bugzilla backup folder (**/var/backups/bugzilla**)
+
+Run the following command
+```
+sudo bugzillautil restoreDatabase backup_file_name
+```
+
+Also restore bugzilla data folder (**/bugzilla/data**)
+
 Apache mod_proxy configuration
 ------------------------------
 Bugzilla web server can be located with another web applications.
@@ -177,7 +206,7 @@ First, mod_proxy should be enabled
 sudo a2enmod proxy proxy_ajp proxy_http rewrite deflate headers proxy_balancer proxy_connect proxy_html
 ```
 
-Configure proxy
+Then configure proxy
 ```
 <VirtualHost *:80>
 
