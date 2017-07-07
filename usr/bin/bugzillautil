@@ -4,28 +4,68 @@ PIDFILE=/var/run/bugzilla.pid
 
 setupDatabaseRootPassword() {
     CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
     docker exec -it "$CID" /bugzilla/setupDatabaseRootPassword
 }
 
 changeDatabaseRootPassword() {
     arguments=( "$@" )
     CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
     docker exec -it "$CID" /bugzilla/changeDatabaseRootPassword "${arguments[1]}"
 }
 
 setupDatabaseUserPassword() {
     CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
     docker exec -it "$CID" /bugzilla/setupDatabaseUserPassword
 }
 
 changeDatabaseUserPassword() {
     CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
     docker exec -it "$CID" /bugzilla/changeDatabaseUserPassword
 }
 
 createDatabase() {
     CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
     docker exec -it "$CID" /bugzilla/createDatabase
+}
+
+backupDatabase() {
+    arguments=( "$@" )
+    CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
+    docker exec -it "$CID" /bugzilla/backupDatabase "${arguments[1]}"
+}
+
+restoreDatabase() {
+    arguments=( "$@" )
+    CID=$(cat "$PIDFILE")
+    if [ "$CID" == "" ];
+    then
+        exit 1
+    fi
+    docker exec -it "$CID" /bugzilla/restoreDatabase "${arguments[1]}"
 }
 
 case $1 in
@@ -44,6 +84,13 @@ case $1 in
     createDatabase)
         createDatabase $@
         ;;
+    backupDatabase)
+        backupDatabase $@
+        ;;
+    restoreDatabase)
+        restoreDatabase $@
+        ;;
     *)
-        echo "Usage: $0 (setRootPassword | changeRootPassword | setUserPassword | changeUserPassword | createDatabase)"
+        echo "Usage: $0 (setRootPassword | changeRootPassword | setUserPassword | changeUserPassword | createDatabase | backupDatabase | restoreDatabase)"
+        ;;
 esac
