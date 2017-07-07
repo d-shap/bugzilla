@@ -18,61 +18,64 @@ COPY        . /tmp
 RUN         apt-get update && \
             apt-get install --assume-yes \
                 apache2 \
-                mysql-server \
-                libappconfig-perl \
-                libdate-calc-perl \
-                libtemplate-perl \
-                libmime-perl \
-                build-essential \
-                libdatetime-timezone-perl \
-                libdatetime-perl \
-                libemail-sender-perl \
-                libemail-mime-perl \
-                libemail-mime-modifier-perl \
-                libdbi-perl \
-                libdbd-mysql-perl \
-                libcgi-pm-perl \
-                libmath-random-isaac-perl \
-                libmath-random-isaac-xs-perl \
                 apache2-mpm-prefork \
+                build-essential \
+                graphviz \
                 libapache2-mod-perl2 \
                 libapache2-mod-perl2-dev \
-                libchart-perl \
-                libxml-perl \
-                libxml-twig-perl \
-                perlmagick \
-                libgd-graph-perl \
-                libtemplate-plugin-gd-perl \
-                libsoap-lite-perl \
-                libhtml-scrubber-perl \
-                libjson-rpc-perl \
-                libtheschwartz-perl \
-                libtest-taint-perl \
+                libappconfig-perl \
                 libauthen-radius-perl \
-                libfile-slurp-perl \
-                libencode-detect-perl \
-                libmodule-build-perl \
-                libnet-ldap-perl \
                 libauthen-sasl-perl \
-                libtemplate-perl-doc \
+                libcgi-pm-perl \
+                libchart-perl \
+                libdate-calc-perl \
+                libdatetime-perl \
+                libdatetime-timezone-perl \
+                libdbd-mysql-perl \
+                libdbi-perl \
+                libemail-mime-modifier-perl \
+                libemail-mime-perl \
+                libemail-sender-perl \
+                libencode-detect-perl \
                 libfile-mimeinfo-perl \
-                libhtml-formattext-withlinks-perl \
+                libfile-slurp-perl \
                 libfile-which-perl \
                 libgd-dev \
+                libgd-graph-perl \
+                libhtml-formattext-withlinks-perl \
+                libhtml-scrubber-perl \
+                libjson-rpc-perl \
+                libmath-random-isaac-perl \
+                libmath-random-isaac-xs-perl \
+                libmime-perl \
+                libmodule-build-perl \
                 libmysqlclient-dev \
+                libnet-ldap-perl \
+                libsoap-lite-perl \
+                libtemplate-perl \
+                libtemplate-perl-doc \
+                libtemplate-plugin-gd-perl \
+                libtest-taint-perl \
+                libtheschwartz-perl \
+                libxml-perl \
+                libxml-twig-perl \
                 lynx-cur \
-                graphviz \
+                mysql-server \
+                perlmagick \
                 python-sphinx \
                 rst2pdf \
-                wget
+                wget && \
+            apt-get clean
 
 # Create user and group
 RUN         groupadd -g $hostgid bugzilla && \
             useradd -u $hostuid -g $hostgid -M bugzilla
 
-# Create folder for bugzilla
+# Create folders for bugzilla
 RUN         mkdir /bugzilla && \
-            chown bugzilla:bugzilla /bugzilla
+            mkdir /bugzilla/backups && \
+            mkdir /bugzilla/logs && \
+            chown -R bugzilla:bugzilla /bugzilla
 
 # Configure MySQL
 RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
@@ -85,6 +88,8 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             sed -i '\|\[mysqld_safe\]|a log_error       = /var/log/mysql/dberror.log' /etc/mysql/my.cnf && \
             sed -i 's|syslog.*|# syslog|' /etc/mysql/conf.d/mysqld_safe_syslog.cnf && \
             rm -rf /var/lib/mysql && \
+            rm -rf /var/log/mysql && \
+            ln -s /bugzilla/logs /var/log/mysql && \
             chown -R bugzilla:bugzilla /var/log/mysql && \
             chown -R bugzilla:bugzilla /var/run/mysqld
 
@@ -98,6 +103,8 @@ RUN         sed -i 's|:80>|:'"$guestport"'>|' /etc/apache2/sites-available/000-d
             a2enconf servername && \
             a2enmod cgi expires headers rewrite && \
             a2ensite bugzilla && \
+            rm -rf /var/log/apache2 && \
+            ln -s /bugzilla/logs /var/log/apache2 && \
             chown -R bugzilla:bugzilla /var/log/apache2 && \
             chown -R bugzilla:bugzilla /var/lock/apache2 && \
             chown -R bugzilla:bugzilla /var/run/apache2
@@ -129,6 +136,10 @@ RUN         mv /tmp/setupDatabaseRootPassword /bugzilla && \
             chmod a+x /bugzilla/changeDatabaseUserPassword && \
             mv /tmp/createDatabase /bugzilla && \
             chmod a+x /bugzilla/createDatabase && \
+            mv /tmp/backupDatabase /bugzilla && \
+            chmod a+x /bugzilla/backupDatabase && \
+            mv /tmp/restoreDatabase /bugzilla && \
+            chmod a+x /bugzilla/restoreDatabase && \
             mv /tmp/startup /bugzilla && \
             chmod a+x /bugzilla/startup && \
             mv /tmp/shutdown /bugzilla && \
