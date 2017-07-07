@@ -1,3 +1,49 @@
 #!/bin/bash
 
 PIDFILE=/var/run/bugzilla.pid
+
+setupDatabaseRootPassword() {
+    CID=$(cat "$PIDFILE")
+    docker exec -it "$CID" /bugzilla/setupDatabaseRootPassword
+}
+
+changeDatabaseRootPassword() {
+    arguments=( "$@" )
+    CID=$(cat "$PIDFILE")
+    docker exec -it "$CID" /bugzilla/changeDatabaseRootPassword "${arguments[1]}"
+}
+
+setupDatabaseUserPassword() {
+    CID=$(cat "$PIDFILE")
+    docker exec -it "$CID" /bugzilla/setupDatabaseUserPassword
+}
+
+changeDatabaseUserPassword() {
+    CID=$(cat "$PIDFILE")
+    docker exec -it "$CID" /bugzilla/changeDatabaseUserPassword
+}
+
+createDatabase() {
+    CID=$(cat "$PIDFILE")
+    docker exec -it "$CID" /bugzilla/createDatabase
+}
+
+case $1 in
+    setRootPassword)
+        setupDatabaseRootPassword $@
+        ;;
+    changeRootPassword)
+        changeDatabaseRootPassword $@
+        ;;
+    setUserPassword)
+        setupDatabaseUserPassword $@
+        ;;
+    changeUserPassword)
+        changeDatabaseUserPassword $@
+        ;;
+    createDatabase)
+        createDatabase $@
+        ;;
+    *)
+        echo "Usage: $0 (setRootPassword | changeRootPassword | setUserPassword | changeUserPassword | createDatabase)"
+esac
