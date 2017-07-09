@@ -122,6 +122,11 @@ sudo bugzillautil setUserPassword
 sudo bugzillautil createDatabase
 ```
 
+Specify the following information:
+* administrator e-mail
+* administrator name
+* administrator password
+
 Management
 ----------
 ### Service management
