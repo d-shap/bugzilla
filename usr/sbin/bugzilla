@@ -3,8 +3,8 @@ docker run \
     --rm \
     --name bugzilla \
     -d \
-    -v /bugzilla/data:/bugzilla/data \
     -v /bugzilla/db:/bugzilla/db \
+    -v /bugzilla/data:/bugzilla/data \
     -v /var/log/bugzilla:/bugzilla/logs \
     -v /var/backups/bugzilla:/bugzilla/backups \
     -e DB_ROOT_PASSWORD=some_password \
