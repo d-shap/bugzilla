@@ -11,6 +11,8 @@ ENV         DEBIAN_FRONTEND noninteractive
 ENV         APACHE_RUN_USER bugzilla
 ENV         APACHE_RUN_GROUP bugzilla
 ENV         GUEST_APP_NAME $guestappname
+ENV         DB_NAME bugs
+ENV         DB_USER_NAME $DB_NAME
 
 COPY        . /tmp
 
@@ -87,7 +89,7 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/my.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/my.cnf && \
             sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
-            sed -i 's|myisam-recover.*|myisam-recover-options  = BACKUP|' /etc/mysql/my.cnf && \
+            sed -i 's|myisam-recover-options.*|myisam-recover-options  = BACKUP|' /etc/mysql/my.cnf && \
             sed -i 's|log_error.*|log_error                = /var/log/mysql/dberror.log|' /etc/mysql/my.cnf && \
             sed -i '\|\[mysqld_safe\]|a log_error       = /var/log/mysql/dberror.log' /etc/mysql/my.cnf && \
             sed -i 's|syslog.*|# syslog|' /etc/mysql/conf.d/mysqld_safe_syslog.cnf && \
@@ -126,6 +128,8 @@ RUN         cd ~ && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${guestappname}/checksetup.pl && \
             sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${guestappname}/localconfig && \
+            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${guestappname}/localconfig && \
+            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${guestappname}/localconfig && \
             sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${guestappname}/localconfig && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${guestappname}/localconfig
 
