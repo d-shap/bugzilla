@@ -140,8 +140,8 @@ RUN         mv /tmp/setupDatabaseRootPassword /bugzilla/scripts && \
             chmod a+x /bugzilla/scripts/changeDatabaseUserPassword && \
             mv /tmp/createDatabase /bugzilla/scripts && \
             chmod a+x /bugzilla/scripts/createDatabase && \
-            mv /tmp/backupDatabase /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/backupDatabase && \
+            mv /tmp/backup /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/backup && \
             mv /tmp/restoreDatabase /bugzilla/scripts && \
             chmod a+x /bugzilla/scripts/restoreDatabase && \
             mv /tmp/startup /bugzilla/scripts && \
