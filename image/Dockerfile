@@ -5,7 +5,7 @@ ARG         hostuid=986
 ARG         hostgid=986
 ARG         guestport=8008
 ARG         guestappname=bugzilla
-ARG         downloadname=bugzilla-5.0.3
+ARG         downloadname=bugzilla-5.0.4
 
 ENV         DEBIAN_FRONTEND noninteractive
 ENV         APACHE_RUN_USER bugzilla
@@ -64,6 +64,7 @@ RUN         apt-get update && \
                 perlmagick \
                 python-sphinx \
                 rst2pdf \
+                vim && \
                 wget && \
             apt-get clean
 
@@ -73,8 +74,9 @@ RUN         groupadd -g $hostgid bugzilla && \
 
 # Create folders for bugzilla
 RUN         mkdir /bugzilla && \
-            mkdir /bugzilla/backups && \
+            mkdir /bugzilla/scripts && \
             mkdir /bugzilla/logs && \
+            mkdir /bugzilla/backups && \
             chown -R bugzilla:bugzilla /bugzilla
 
 # Configure MySQL
@@ -126,27 +128,27 @@ RUN         cd ~ && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${guestappname}/localconfig
 
 # Configure helper scripts
-RUN         mv /tmp/setupDatabaseRootPassword /bugzilla && \
-            chmod a+x /bugzilla/setupDatabaseRootPassword && \
-            mv /tmp/changeDatabaseRootPassword /bugzilla && \
-            chmod a+x /bugzilla/changeDatabaseRootPassword && \
-            mv /tmp/setupDatabaseUserPassword /bugzilla && \
-            chmod a+x /bugzilla/setupDatabaseUserPassword && \
-            mv /tmp/changeDatabaseUserPassword /bugzilla && \
-            chmod a+x /bugzilla/changeDatabaseUserPassword && \
-            mv /tmp/createDatabase /bugzilla && \
-            chmod a+x /bugzilla/createDatabase && \
-            mv /tmp/backupDatabase /bugzilla && \
-            chmod a+x /bugzilla/backupDatabase && \
-            mv /tmp/restoreDatabase /bugzilla && \
-            chmod a+x /bugzilla/restoreDatabase && \
-            mv /tmp/startup /bugzilla && \
-            chmod a+x /bugzilla/startup && \
-            mv /tmp/shutdown /bugzilla && \
-            chmod a+x /bugzilla/shutdown
+RUN         mv /tmp/setupDatabaseRootPassword /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/setupDatabaseRootPassword && \
+            mv /tmp/changeDatabaseRootPassword /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/changeDatabaseRootPassword && \
+            mv /tmp/setupDatabaseUserPassword /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/setupDatabaseUserPassword && \
+            mv /tmp/changeDatabaseUserPassword /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/changeDatabaseUserPassword && \
+            mv /tmp/createDatabase /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/createDatabase && \
+            mv /tmp/backupDatabase /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/backupDatabase && \
+            mv /tmp/restoreDatabase /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/restoreDatabase && \
+            mv /tmp/startup /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/startup && \
+            mv /tmp/shutdown /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/shutdown
 
 USER        bugzilla
 
 EXPOSE      $guestport
 
-ENTRYPOINT  ["/bugzilla/startup"]
+ENTRYPOINT  ["/bugzilla/scripts/startup"]
