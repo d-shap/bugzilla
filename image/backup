@@ -1,17 +1,17 @@
 #!/bin/bash
 if [ "$1" != "" ];
 then
-    DUMP="bugs.dump"
+    DUMP="$DB_NAME.dump"
     TEMPDUMPFILE="/bugzilla/tmp_$DUMP"
     DUMPFILE="/bugzilla/$DUMP"
     TEMPTILE="/bugzilla/backups/tmp_$1.tar.gz"
     FILE="/bugzilla/backups/$1.tar.gz"
 
-    mysqldump --max-allowed-packet=32M --user="bugs" --password="$DB_USER_PASSWORD" "bugs" > $TEMPDUMPFILE
+    mysqldump --max-allowed-packet=32M --user="$DB_USER_NAME" --password="$DB_USER_PASSWORD" "$DB_NAME" > $TEMPDUMPFILE
     mv $TEMPDUMPFILE $DUMPFILE
 
     cd /bugzilla
-    tar -czf $TEMPTILE db data $DUMP
+    tar -czf $TEMPTILE $DUMP data
     mv $TEMPTILE $FILE
 
     rm $DUMPFILE
