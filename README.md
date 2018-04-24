@@ -24,7 +24,7 @@ sudo chmod u+x ./build
 
 Execute **build**
 ```
-sudo ./build bugzilla bugzilla
+sudo ./build bugzilla
 ```
 
 Create folders for bugzilla database
