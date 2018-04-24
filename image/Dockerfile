@@ -64,7 +64,7 @@ RUN         apt-get update && \
                 perlmagick \
                 python-sphinx \
                 rst2pdf \
-                vim && \
+                vim \
                 wget && \
             apt-get clean
 
