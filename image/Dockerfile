@@ -74,6 +74,8 @@ RUN         groupadd -g $hostgid bugzilla && \
 
 # Create folders for bugzilla
 RUN         mkdir /bugzilla && \
+            mkdir /bugzilla/db && \
+            mkdir /bugzilla/data && \
             mkdir /bugzilla/scripts && \
             mkdir /bugzilla/logs && \
             mkdir /bugzilla/backups && \
