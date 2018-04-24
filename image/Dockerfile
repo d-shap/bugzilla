@@ -24,7 +24,6 @@ RUN         apt-get update && \
                 libapache2-mod-perl2 \
                 libapache2-mod-perl2-dev \
                 libappconfig-perl \
-                libarchive-tar-perl \
                 libauthen-radius-perl \
                 libauthen-sasl-perl \
                 libcgi-pm-perl \
