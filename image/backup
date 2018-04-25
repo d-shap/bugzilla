@@ -7,7 +7,7 @@ then
     TEMPTILE="/bugzilla/backups/tmp_$1.tar.gz"
     FILE="/bugzilla/backups/$1.tar.gz"
 
-    mysqldump --max-allowed-packet=32M --user="$DB_USER_NAME" --password="$DB_USER_PASSWORD" "$DB_NAME" > $TEMPDUMPFILE
+    mysqldump --max-allowed-packet=100M --user="$DB_USER_NAME" --password="$DB_USER_PASSWORD" "$DB_NAME" > $TEMPDUMPFILE
     mv $TEMPDUMPFILE $DUMPFILE
 
     cd /bugzilla
