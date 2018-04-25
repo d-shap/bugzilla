@@ -8,4 +8,4 @@ sed -i "s|\$db_pass.*|\$db_pass = '"$DB_USER_PASSWORD"';|" /var/www/html/${GUEST
 
 trap /bugzilla/scripts/shutdown SIGHUP SIGINT SIGTERM TERM
 
-mysqld & /usr/sbin/apache2ctl -D FOREGROUND & wait
+mysqld & apache2ctl -D FOREGROUND & wait
