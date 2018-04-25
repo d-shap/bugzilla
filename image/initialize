@@ -1,0 +1,35 @@
+#!/bin/bash
+
+setRootPassword() {
+    mysqladmin --user=root password "$DB_ROOT_PASSWORD"
+}
+
+setUserPassword() {
+    mysql --user=root --password="$DB_ROOT_PASSWORD" -e "GRANT SELECT, INSERT, UPDATE, DELETE, INDEX, ALTER, CREATE, LOCK TABLES, CREATE TEMPORARY TABLES, DROP, REFERENCES ON $DB_NAME.* TO $DB_USER_NAME@localhost IDENTIFIED BY '$DB_USER_PASSWORD';"
+}
+
+createDatabase() {
+    /var/www/html/$GUEST_APP_NAME/checksetup.pl
+    if [ $? -ne 0 ];
+    then
+        exit 1
+    fi
+    mysql --user=root --password="$DB_ROOT_PASSWORD" -e "USE $DB_NAME; ALTER TABLE attachments AVG_ROW_LENGTH=1000000, MAX_ROWS=20000;"
+}
+
+case $1 in
+    setRootPassword)
+        setRootPassword
+        ;;
+    setUserPassword)
+        setUserPassword
+        ;;
+    createDatabase)
+        createDatabase
+        ;;
+    *)
+        setRootPassword
+        setUserPassword
+        createDatabase
+        ;;
+esac
