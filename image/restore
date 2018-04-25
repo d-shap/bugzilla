@@ -1,7 +1,17 @@
 #!/bin/bash
-if [ "$1" == "" ];
+if [ "$1" != "" ];
 then
-    exit 1
-fi
+    DUMP="$DB_NAME.dump"
+    DUMPFILE="/bugzilla/$DUMP"
+    FILE="/bugzilla/backups/$1.tar.gz"
 
-mysql --user=root --password="$DB_ROOT_PASSWORD" "bugs" < /bugzilla/backups/$1
+    if [ -e "$FILE" ];
+    then
+        cd /bugzilla
+        tar -xzf $FILE $DUMP data
+
+        mysql --user="$DB_USER_NAME" --password="$DB_USER_PASSWORD" "$DB_NAME" < $DUMPFILE
+
+        rm $DUMPFILE
+    fi
+fi
