@@ -78,7 +78,7 @@ case $1 in
         changeRootPassword $@
         ;;
     changeUserPassword)
-        changeUserPassword $@
+        changeUserPassword
         ;;
     backup)
         backup $@
