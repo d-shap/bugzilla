@@ -134,16 +134,12 @@ RUN         cd ~ && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${guestappname}/localconfig
 
 # Configure helper scripts
-RUN         mv /tmp/setupDatabaseRootPassword /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/setupDatabaseRootPassword && \
-            mv /tmp/changeDatabaseRootPassword /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/changeDatabaseRootPassword && \
-            mv /tmp/setupDatabaseUserPassword /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/setupDatabaseUserPassword && \
-            mv /tmp/changeDatabaseUserPassword /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/changeDatabaseUserPassword && \
-            mv /tmp/createDatabase /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/createDatabase && \
+RUN         mv /tmp/initialize /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/initialize && \
+            mv /tmp/changeRootPassword /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/changeRootPassword && \
+            mv /tmp/changeUserPassword /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/changeUserPassword && \
             mv /tmp/backup /bugzilla/scripts && \
             chmod a+x /bugzilla/scripts/backup && \
             mv /tmp/restore /bugzilla/scripts && \
