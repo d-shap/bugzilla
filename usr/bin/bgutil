@@ -12,6 +12,10 @@ initialize() {
     fi
 
     docker exec -it "$CID" /bugzilla/scripts/initialize "${arguments[1]}"
+    if [ $? -ne 0 ];
+    then
+        exit 2
+    fi
 }
 
 changeRootPassword() {
@@ -24,6 +28,10 @@ changeRootPassword() {
     fi
 
     docker exec -it "$CID" /bugzilla/scripts/changeRootPassword "${arguments[1]}"
+    if [ $? -ne 0 ];
+    then
+        exit 2
+    fi
 }
 
 changeUserPassword() {
@@ -34,6 +42,10 @@ changeUserPassword() {
     fi
 
     docker exec -it "$CID" /bugzilla/scripts/changeUserPassword
+    if [ $? -ne 0 ];
+    then
+        exit 2
+    fi
 }
 
 backup() {
@@ -46,6 +58,10 @@ backup() {
     fi
 
     docker exec -it "$CID" /bugzilla/scripts/backup "${arguments[1]}"
+    if [ $? -ne 0 ];
+    then
+        exit 2
+    fi
 }
 
 restore() {
@@ -58,6 +74,10 @@ restore() {
     fi
 
     docker exec -it "$CID" /bugzilla/scripts/restore "${arguments[1]}"
+    if [ $? -ne 0 ];
+    then
+        exit 2
+    fi
 }
 
 bash() {
@@ -68,6 +88,10 @@ bash() {
     fi
 
     docker exec -it "$CID" sh -c "cd /bugzilla && /bin/bash"
+    if [ $? -ne 0 ];
+    then
+        exit 2
+    fi
 }
 
 case $1 in
