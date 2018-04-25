@@ -2,17 +2,7 @@
 
 PIDFILE=/var/run/bugzilla.pid
 
-setupDatabaseRootPassword() {
-    CID=$(cat "$PIDFILE")
-    if [ "$CID" == "" ];
-    then
-        exit 1
-    fi
-
-    docker exec -it "$CID" /bugzilla/scripts/setupDatabaseRootPassword
-}
-
-changeDatabaseRootPassword() {
+initialize() {
     arguments=( "$@" )
 
     CID=$(cat "$PIDFILE")
@@ -21,37 +11,29 @@ changeDatabaseRootPassword() {
         exit 1
     fi
 
-    docker exec -it "$CID" /bugzilla/scripts/changeDatabaseRootPassword "${arguments[1]}"
+    docker exec -it "$CID" /bugzilla/scripts/initialize "${arguments[1]}"
 }
 
-setupDatabaseUserPassword() {
+changeRootPassword() {
+    arguments=( "$@" )
+
     CID=$(cat "$PIDFILE")
     if [ "$CID" == "" ];
     then
         exit 1
     fi
 
-    docker exec -it "$CID" /bugzilla/scripts/setupDatabaseUserPassword
+    docker exec -it "$CID" /bugzilla/scripts/changeRootPassword "${arguments[1]}"
 }
 
-changeDatabaseUserPassword() {
+changeUserPassword() {
     CID=$(cat "$PIDFILE")
     if [ "$CID" == "" ];
     then
         exit 1
     fi
 
-    docker exec -it "$CID" /bugzilla/scripts/changeDatabaseUserPassword
-}
-
-createDatabase() {
-    CID=$(cat "$PIDFILE")
-    if [ "$CID" == "" ];
-    then
-        exit 1
-    fi
-
-    docker exec -it "$CID" /bugzilla/scripts/createDatabase
+    docker exec -it "$CID" /bugzilla/scripts/changeUserPassword
 }
 
 backup() {
@@ -89,20 +71,14 @@ bash() {
 }
 
 case $1 in
-    setRootPassword)
-        setupDatabaseRootPassword $@
+    initialize)
+        initialize $@
         ;;
     changeRootPassword)
-        changeDatabaseRootPassword $@
-        ;;
-    setUserPassword)
-        setupDatabaseUserPassword $@
+        changeRootPassword $@
         ;;
     changeUserPassword)
-        changeDatabaseUserPassword $@
-        ;;
-    createDatabase)
-        createDatabase $@
+        changeUserPassword $@
         ;;
     backup)
         backup $@
@@ -114,6 +90,6 @@ case $1 in
         bash
         ;;
     *)
-        echo "Usage: $0 (setRootPassword | changeRootPassword | setUserPassword | changeUserPassword | createDatabase | backup | restore | bash)"
+        echo "Usage: $0 (initialize | changeRootPassword | changeUserPassword | backup | restore | bash)"
         ;;
 esac
