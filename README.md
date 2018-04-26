@@ -136,6 +136,11 @@ Backup file **/var/backups/bugzilla/&lt;filename&gt;.tar.gz** will be created.
 sudo bgutil restore <filename>
 ```
 
+### Command line (bash)
+```
+sudo bgutil bash
+```
+
 Apache mod_proxy configuration
 ------------------------------
 Bugzilla web server can be located with another web applications.
