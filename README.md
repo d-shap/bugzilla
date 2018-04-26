@@ -202,25 +202,23 @@ Run the following command:
 sudo bgutil changeRootPassword "<old_password>"
 ```
 
-### Change database password for bugzilla user
-Stop bugzilla service
+### How to change bugzilla database user password
+Stop bugzilla service:
 ```
 sudo service bugzilla stop
 ```
 
-Specify new database password for bugzilla user in **/usr/sbin/bugzilla**
+Specify new bugzilla database user password in **/usr/sbin/bugzilla** file:
 ```
-...
--e DB_USER_PASSWORD=new_password
-...
+docker run ... -e DB_USER_PASSWORD="new_password" ...  
 ```
 
-Start bugzilla service
+Start bugzilla service:
 ```
 sudo service bugzilla start
 ```
 
 Run the following command
 ```
-sudo bugzillautil changeUserPassword
+sudo bgutil changeUserPassword
 ```
