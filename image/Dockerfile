@@ -127,6 +127,7 @@ RUN         cd ~ && \
             cd /var/www/html/${guestappname} && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${guestappname}/checksetup.pl && \
+            chown -R bugzilla:bugzilla /var/www/html/${guestappname} && \
             sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${guestappname}/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${guestappname}/localconfig && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${guestappname}/localconfig && \
