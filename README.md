@@ -222,3 +222,8 @@ Run the following command
 ```
 sudo bgutil changeUserPassword
 ```
+
+### How to create cron job for backups
+```
+sudo crontab -l | { cat; echo "minute hour * * * /usr/bin/bgutil backup <filename>"; echo ""; } | sudo crontab -
+```
