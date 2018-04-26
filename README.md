@@ -12,22 +12,22 @@ To run container next volumes should be mapped
 
 Installation
 ------------
-Create user and group to own bugzilla files and to run docker container
+Create user and group to own bugzilla files and to run docker container:
 ```
 sudo useradd -r bugzilla
 ```
 
-Make **build** executable
+Make **build** executable:
 ```
 sudo chmod u+x ./build
 ```
 
-Execute **build**
+Execute **build**:
 ```
 sudo ./build bugzilla
 ```
 
-Create folders for bugzilla database
+Create folders for bugzilla database:
 ```
 sudo mkdir /bugzilla
 ```
@@ -38,17 +38,17 @@ sudo mkdir /bugzilla/db
 sudo mkdir /bugzilla/data
 ```
 
-Create folder for logs
+Create folder for logs:
 ```
 sudo mkdir /var/log/bugzilla
 ```
 
-Create folder for backups
+Create folder for backups:
 ```
 sudo mkdir /var/backups/bugzilla
 ```
 
-Grant permit to all folders
+Grant permit to all folders:
 ```
 sudo chown -R bugzilla:bugzilla /bugzilla
 ```
@@ -59,22 +59,22 @@ sudo chown bugzilla:bugzilla /var/log/bugzilla
 sudo chown bugzilla:bugzilla /var/backups/bugzilla
 ```
 
-Copy **etc/init.d/bugzilla** to **/etc/init.d** folder
+Copy **etc/init.d/bugzilla** to **/etc/init.d** folder:
 ```
 sudo cp ./etc/init.d/bugzilla /etc/init.d
 ```
 
-Copy **usr/sbin/bugzilla** to **/usr/sbin** folder
+Copy **usr/sbin/bugzilla** to **/usr/sbin** folder:
 ```
 sudo cp ./usr/sbin/bugzilla /usr/sbin
 ```
 
-Copy **usr/bin/bugzillautil** to **/usr/bin** folder
+Copy **usr/bin/bgutil** to **/usr/bin** folder:
 ```
-sudo cp ./usr/bin/bugzillautil /usr/bin
+sudo cp ./usr/bin/bgutil /usr/bin
 ```
 
-Make all files executable
+Make all files executable:
 ```
 sudo chmod a+x /etc/init.d/bugzilla
 ```
@@ -82,44 +82,38 @@ sudo chmod a+x /etc/init.d/bugzilla
 sudo chmod a+x /usr/sbin/bugzilla
 ```
 ```
-sudo chmod a+x /usr/bin/bugzillautil
+sudo chmod a+x /usr/bin/bgutil
 ```
 
-Register service
+Register service:
 ```
 sudo update-rc.d bugzilla defaults
 ```
 
-Specify database password for root user in **/usr/sbin/bugzilla**
+Specify database root password in **/usr/sbin/bugzilla** file:
 ```
 ...
 -e DB_ROOT_PASSWORD=some_password
 ...
 ```
 
-Specify database password for bugzilla user in **/usr/sbin/bugzilla**
+Specify bugzilla database user password in **/usr/sbin/bugzilla** file:
 ```
 ...
 -e DB_USER_PASSWORD=some_password
 ...
 ```
 
-Start bugzilla service
+Start bugzilla service:
 ```
 sudo service bugzilla start
 ```
 
 First-time configuration
 ------------------------
-Run the following commands
+Run the following command:
 ```
-sudo bugzillautil setRootPassword
-```
-```
-sudo bugzillautil setUserPassword
-```
-```
-sudo bugzillautil createDatabase
+sudo bgutil initialize
 ```
 
 Specify the following information:
