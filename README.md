@@ -181,27 +181,25 @@ sudo service apache2 restart
 
 HOW TO
 ------
-### Change database password for root user
-Stop bugzilla service
+### How to change database root password
+Stop bugzilla service:
 ```
 sudo service bugzilla stop
 ```
 
-Specify new database password for root user in **/usr/sbin/bugzilla**
+Specify new database root password in **/usr/sbin/bugzilla** file:
 ```
-...
--e DB_ROOT_PASSWORD=new_password
-...
+docker run ... -e DB_ROOT_PASSWORD="new_password" ...
 ```
 
-Start bugzilla service
+Start bugzilla service:
 ```
 sudo service bugzilla start
 ```
 
-Run the following command
+Run the following command:
 ```
-sudo bugzillautil changeRootPassword old_password
+sudo bgutil changeRootPassword "<old_password>"
 ```
 
 ### Change database password for bugzilla user
