@@ -92,16 +92,12 @@ sudo update-rc.d bugzilla defaults
 
 Specify database root password in **/usr/sbin/bugzilla** file:
 ```
-...
--e DB_ROOT_PASSWORD=some_password
-...
+docker run ... -e DB_ROOT_PASSWORD="some_password" ...
 ```
 
 Specify bugzilla database user password in **/usr/sbin/bugzilla** file:
 ```
-...
--e DB_USER_PASSWORD=some_password
-...
+docker run ... -e DB_USER_PASSWORD="some_password" ...  
 ```
 
 Start bugzilla service:
@@ -128,6 +124,58 @@ Management
 sudo service bugzilla (start|stop|status|restart)
 ```
 
+### Create backup
+```
+sudo bgutil backup <filename>
+```
+
+Backup file **/var/backups/bugzilla/&lt;filename&gt;.tar.gz** will be created.
+
+### Restore backup
+```
+sudo bgutil restore <filename>
+```
+
+Apache mod_proxy configuration
+------------------------------
+Bugzilla web server can be located with another web applications.
+For example, bugzilla, artifactory, mercurial etc can be run as docker containers on the same host.
+In this case apache server can be used to redirect requests to different docker containers.
+
+First, mod_proxy should be enabled
+```
+sudo a2enmod proxy proxy_ajp proxy_http rewrite deflate headers proxy_balancer proxy_connect proxy_html
+```
+
+Then configure proxy
+```
+<VirtualHost *:80>
+
+...
+
+ProxyPreserveHost On
+<Proxy *>
+    Order allow,deny
+    Allow from all
+</Proxy>
+
+...
+
+ProxyPass /bugzilla http://localhost:8008/bugzilla
+ProxyPassReverse /bugzilla http://localhost:8008/bugzilla
+
+...
+
+</VirtualHost>
+```
+
+Finally, restart apache service
+```
+sudo service apache2 restart
+```
+
+HOW TO
+------
 ### Change database password for root user
 Stop bugzilla service
 ```
@@ -172,62 +220,4 @@ sudo service bugzilla start
 Run the following command
 ```
 sudo bugzillautil changeUserPassword
-```
-
-### Backup
-Run the following command
-```
-sudo bugzillautil backupDatabase backup_file_name
-```
-
-MySQL dump file will be created in bugzilla backup folder (**/var/backups/bugzilla**) with the name **backup_file_name**
-
-Also backup bugzilla data folder (**/bugzilla/data**)
-
-### Restore
-Place MySQL dump file to bugzilla backup folder (**/var/backups/bugzilla**)
-
-Run the following command
-```
-sudo bugzillautil restoreDatabase backup_file_name
-```
-
-Also restore bugzilla data folder (**/bugzilla/data**)
-
-Apache mod_proxy configuration
-------------------------------
-Bugzilla web server can be located with another web applications.
-For example, bugzilla, artifactory, mercurial etc can be run as docker containers on the same host.
-In this case apache server can be used to redirect requests to different docker containers.
-
-First, mod_proxy should be enabled
-```
-sudo a2enmod proxy proxy_ajp proxy_http rewrite deflate headers proxy_balancer proxy_connect proxy_html
-```
-
-Then configure proxy
-```
-<VirtualHost *:80>
-
-...
-
-ProxyPreserveHost On
-<Proxy *>
-    Order allow,deny
-    Allow from all
-</Proxy>
-
-...
-
-ProxyPass /bugzilla http://localhost:8008/bugzilla
-ProxyPassReverse /bugzilla http://localhost:8008/bugzilla
-
-...
-
-</VirtualHost>
-```
-
-Finally, restart apache service
-```
-sudo service apache2 restart
 ```
