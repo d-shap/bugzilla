@@ -6,7 +6,7 @@ Container runs as non-root user. This user owns bugzilla process and owns bugzil
 
 To run container next volumes should be mapped
 * folder for SQL database
-* folder for bugzilla data, such as local stored attachments (Big Files)
+* folder for bugzilla data, such as categories and local stored attachments (Big Files)
 * log folder
 * backup folder
 
@@ -144,7 +144,7 @@ sudo bgutil bash
 Apache mod_proxy configuration
 ------------------------------
 Bugzilla web server can be located with another web applications.
-For example, bugzilla, artifactory, mercurial etc can be run as docker containers on the same host.
+For example, mercurial, bugzilla, wiki etc can be run as docker containers on the same host.
 In this case apache server can be used to redirect requests to different docker containers.
 
 First, mod_proxy should be enabled:
