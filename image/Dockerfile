@@ -5,7 +5,6 @@ ARG         hostuid=986
 ARG         hostgid=986
 ARG         guestport=8008
 ARG         guestappname=bugzilla
-ARG         downloadname=bugzilla-5.0.4
 
 ENV         DEBIAN_FRONTEND noninteractive
 ENV         APACHE_RUN_USER bugzilla
@@ -13,6 +12,8 @@ ENV         APACHE_RUN_GROUP bugzilla
 ENV         GUEST_APP_NAME $guestappname
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME $DB_NAME
+ENV         DOWNLOAD_NAME bugzilla-5.0.4
+ENV         DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$DOWNLOAD_NAME.tar.gz
 
 COPY        . /tmp
 
@@ -118,10 +119,10 @@ RUN         sed -i 's|:80>|:'"$guestport"'>|' /etc/apache2/sites-available/000-d
 
 # Configure bugzilla
 RUN         cd ~ && \
-            wget https://ftp.mozilla.org/pub/mozilla.org/webtools/${downloadname}.tar.gz && \
-            tar xzf ${downloadname}.tar.gz -C /var/www/html && \
-            rm ${downloadname}.tar.gz && \
-            mv /var/www/html/${downloadname} /var/www/html/${guestappname} && \
+            wget ${DOWNLOAD_URL} && \
+            tar xzf ${DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
+            rm ${DOWNLOAD_NAME}.tar.gz && \
+            mv /var/www/html/${DOWNLOAD_NAME} /var/www/html/${guestappname} && \
             rm -rf /var/www/html/${guestappname}/data && \
             ln -s /bugzilla/data /var/www/html/${guestappname}/data && \
             chown -R bugzilla:bugzilla /var/www/html/${guestappname} && \
