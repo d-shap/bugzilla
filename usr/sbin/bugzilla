@@ -10,5 +10,5 @@ docker run \
     -v /var/backups/bugzilla:/bugzilla/backups \
     -e DB_ROOT_PASSWORD="some_password" \
     -e DB_USER_PASSWORD="some_password" \
-    -p 8008:8008 \
+    -p 8007:8007 \
         bugzilla

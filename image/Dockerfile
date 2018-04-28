@@ -3,7 +3,7 @@ MAINTAINER  Dmitry Shapovalov
 
 ARG         hostuid=967
 ARG         hostgid=967
-ARG         guestport=8008
+ARG         guestport=8007
 ARG         guestappname=bugzilla
 
 ENV         DEBIAN_FRONTEND noninteractive

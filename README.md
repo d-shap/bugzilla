@@ -166,8 +166,8 @@ ProxyPreserveHost On
 
 ...
 
-ProxyPass /bugzilla http://localhost:8008/bugzilla
-ProxyPassReverse /bugzilla http://localhost:8008/bugzilla
+ProxyPass /bugzilla http://localhost:8007/bugzilla
+ProxyPassReverse /bugzilla http://localhost:8007/bugzilla
 
 ...
 
