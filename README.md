@@ -223,6 +223,15 @@ Run the following command
 sudo bgutil changeUserPassword
 ```
 
+### How to specify special characters in password
+Special characters should be escaped:
+```
+docker run ... -e DB_ROOT_PASSWORD="pa\$\$word" ...
+```
+```
+docker run ... -e DB_USER_PASSWORD="pas\$11" ...  
+```
+
 ### How to create cron job for backups
 ```
 sudo crontab -l | { cat; echo "minute hour * * * /usr/bin/bgutil backup <filename>"; echo ""; } | sudo crontab -
