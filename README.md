@@ -115,6 +115,7 @@ Specify the following information:
 * administrator e-mail
 * administrator name
 * administrator password
+* administrator password confirmation
 
 Management
 ----------
