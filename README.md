@@ -2,7 +2,8 @@ Bugzilla web server
 ===================
 Docker image for bugzilla web server.
 
-Container runs as non-root user. This user owns bugzilla process and owns bugzilla database.
+Container runs as non-root user.
+This user owns bugzilla process and owns bugzilla database.
 
 To run container next volumes should be mapped
 * folder for SQL database
@@ -105,9 +106,7 @@ Start bugzilla service:
 sudo service bugzilla start
 ```
 
-First-time configuration
-------------------------
-Run the following command:
+Initialize bugzilla database:
 ```
 sudo bgutil initialize
 ```
