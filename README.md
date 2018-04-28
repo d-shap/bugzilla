@@ -93,12 +93,12 @@ sudo update-rc.d bugzilla defaults
 
 Specify database root password in **/usr/sbin/bugzilla** file:
 ```
-docker run ... -e DB_ROOT_PASSWORD="some_password" ...
+docker run ... -e DB_ROOT_PASSWORD="<some_password>" ...
 ```
 
 Specify bugzilla database user password in **/usr/sbin/bugzilla** file:
 ```
-docker run ... -e DB_USER_PASSWORD="some_password" ...  
+docker run ... -e DB_USER_PASSWORD="<some_password>" ...  
 ```
 
 Start bugzilla service:
@@ -189,7 +189,7 @@ sudo service bugzilla stop
 
 Specify new database root password in **/usr/sbin/bugzilla** file:
 ```
-docker run ... -e DB_ROOT_PASSWORD="new_password" ...
+docker run ... -e DB_ROOT_PASSWORD="<new_password>" ...
 ```
 
 Start bugzilla service:
@@ -210,7 +210,7 @@ sudo service bugzilla stop
 
 Specify new bugzilla database user password in **/usr/sbin/bugzilla** file:
 ```
-docker run ... -e DB_USER_PASSWORD="new_password" ...  
+docker run ... -e DB_USER_PASSWORD="<new_password>" ...  
 ```
 
 Start bugzilla service:
