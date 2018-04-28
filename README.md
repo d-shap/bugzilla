@@ -7,7 +7,7 @@ This user owns bugzilla process and owns bugzilla database.
 
 To run container next volumes should be mapped
 * folder for SQL database
-* folder for bugzilla data, such as categories and local stored attachments (Big Files)
+* folder for bugzilla data, such as local stored attachments (Big Files)
 * log folder
 * backup folder
 
