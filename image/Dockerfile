@@ -1,8 +1,8 @@
 FROM        debian:jessie
 MAINTAINER  Dmitry Shapovalov
 
-ARG         hostuid=968
-ARG         hostgid=968
+ARG         hostuid=967
+ARG         hostgid=967
 ARG         guestport=8008
 ARG         guestappname=bugzilla
 
