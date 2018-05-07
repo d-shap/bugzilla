@@ -7,11 +7,14 @@ ARG         guestport=8007
 ARG         guestappname=bugzilla
 
 ENV         DEBIAN_FRONTEND noninteractive
-ENV         APACHE_RUN_USER bugzilla
-ENV         APACHE_RUN_GROUP bugzilla
+ENV         RUN_USER bugzilla
+ENV         RUN_GROUP bugzilla
+ENV         APACHE_RUN_USER $RUN_USER
+ENV         APACHE_RUN_GROUP $RUN_GROUP
+ENV         GUEST_PORT $guestport
 ENV         GUEST_APP_NAME $guestappname
 ENV         DB_NAME bugs
-ENV         DB_USER_NAME $DB_NAME
+ENV         DB_USER_NAME bugs
 ENV         DOWNLOAD_NAME bugzilla-5.0.4
 ENV         DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$DOWNLOAD_NAME.tar.gz
 
@@ -73,8 +76,8 @@ RUN         apt-get update && \
             apt-get clean
 
 # Create user and group
-RUN         groupadd -g $hostgid bugzilla && \
-            useradd -u $hostuid -g $hostgid -M bugzilla
+RUN         groupadd -g $hostgid $RUN_GROUP && \
+            useradd -u $hostuid -g $hostgid -M $RUN_USER
 
 # Create folders for bugzilla
 RUN         mkdir /bugzilla && \
@@ -83,11 +86,11 @@ RUN         mkdir /bugzilla && \
             mkdir /bugzilla/scripts && \
             mkdir /bugzilla/logs && \
             mkdir /bugzilla/backups && \
-            chown -R bugzilla:bugzilla /bugzilla
+            chown -R $RUN_USER:$RUN_GROUP /bugzilla
 
 # Configure MySQL
 RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
-            sed -i 's|user.*|user            = bugzilla|' /etc/mysql/my.cnf && \
+            sed -i 's|user.*|user            = $RUN_USER|' /etc/mysql/my.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/my.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/my.cnf && \
             sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
@@ -98,43 +101,42 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             rm -rf /var/lib/mysql && \
             rm -rf /var/log/mysql && \
             ln -s /bugzilla/logs /var/log/mysql && \
-            chown -R bugzilla:bugzilla /var/log/mysql && \
-            chown -R bugzilla:bugzilla /var/run/mysqld
+            chown -R $RUN_USER:$RUN_GROUP /var/log/mysql && \
+            chown -R $RUN_USER:$RUN_GROUP /var/run/mysqld
 
 # Configure apache
-RUN         sed -i 's|:80>|:'"$guestport"'>|' /etc/apache2/sites-available/000-default.conf && \
+RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-default.conf && \
             sed -i 's|#ServerName www.example.com|ServerName localhost|' /etc/apache2/sites-available/000-default.conf && \
             mv /tmp/bugzilla.conf /etc/apache2/sites-available && \
-            sed -i 's|/guestappname|/'"$guestappname"'|' /etc/apache2/sites-available/bugzilla.conf && \
-            sed -i 's|Listen 80|Listen '"$guestport"'|' /etc/apache2/ports.conf && \
+            sed -i 's|/guestappname|/'"$GUEST_APP_NAME"'|' /etc/apache2/sites-available/bugzilla.conf && \
+            sed -i 's|Listen 80|Listen '"$GUEST_PORT"'|' /etc/apache2/ports.conf && \
             echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
             a2enconf servername && \
             a2enmod cgi expires headers rewrite && \
             a2ensite bugzilla && \
             rm -rf /var/log/apache2 && \
             ln -s /bugzilla/logs /var/log/apache2 && \
-            chown -R bugzilla:bugzilla /var/log/apache2 && \
-            chown -R bugzilla:bugzilla /var/lock/apache2 && \
-            chown -R bugzilla:bugzilla /var/run/apache2
+            chown -R $RUN_USER:$RUN_GROUP /var/log/apache2 && \
+            chown -R $RUN_USER:$RUN_GROUP /var/lock/apache2 && \
+            chown -R $RUN_USER:$RUN_GROUP /var/run/apache2
 
 # Configure bugzilla
 RUN         cd ~ && \
             wget ${DOWNLOAD_URL} && \
             tar xzf ${DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
             rm ${DOWNLOAD_NAME}.tar.gz && \
-            mv /var/www/html/${DOWNLOAD_NAME} /var/www/html/${guestappname} && \
-            rm -rf /var/www/html/${guestappname}/data && \
-            ln -s /bugzilla/data /var/www/html/${guestappname}/data && \
-            chown -R bugzilla:bugzilla /var/www/html/${guestappname} && \
-            cd /var/www/html/${guestappname} && \
+            mv /var/www/html/${DOWNLOAD_NAME} /var/www/html/${GUEST_APP_NAME} && \
+            rm -rf /var/www/html/${GUEST_APP_NAME}/data && \
+            ln -s /bugzilla/data /var/www/html/${GUEST_APP_NAME}/data && \
+            cd /var/www/html/${GUEST_APP_NAME} && \
             /usr/bin/perl install-module.pl --all && \
-            /var/www/html/${guestappname}/checksetup.pl && \
-            chown -R bugzilla:bugzilla /var/www/html/${guestappname} && \
-            sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${guestappname}/localconfig && \
-            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${guestappname}/localconfig && \
-            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${guestappname}/localconfig && \
-            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${guestappname}/localconfig && \
-            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${guestappname}/localconfig
+            /var/www/html/${GUEST_APP_NAME}/checksetup.pl && \
+            chown -R $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
+            sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
+            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
+            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
+            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
+            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${GUEST_APP_NAME}/localconfig
 
 # Configure helper scripts
 RUN         mv /tmp/initialize /bugzilla/scripts && \
@@ -152,8 +154,8 @@ RUN         mv /tmp/initialize /bugzilla/scripts && \
             mv /tmp/shutdown /bugzilla/scripts && \
             chmod a+x /bugzilla/scripts/shutdown
 
-USER        bugzilla
+USER        $RUN_USER
 
-EXPOSE      $guestport
+EXPOSE      $GUEST_PORT
 
 ENTRYPOINT  ["/bugzilla/scripts/startup"]
