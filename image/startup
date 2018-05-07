@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ! -d /bugzilla/database/mysql ];
+if [ ! -d /bugzilla/db/mysql ];
 then
     mysql_install_db
 fi
