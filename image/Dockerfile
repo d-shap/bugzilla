@@ -121,7 +121,7 @@ RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-
             chown -R $RUN_USER:$RUN_GROUP /var/run/apache2
 
 # Configure bugzilla
-RUN         cd ~ && \
+RUN         cd /tmp && \
             wget ${DOWNLOAD_URL} && \
             tar xzf ${DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
             rm ${DOWNLOAD_NAME}.tar.gz && \
