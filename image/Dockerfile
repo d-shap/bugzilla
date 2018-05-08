@@ -90,7 +90,7 @@ RUN         mkdir /bugzilla && \
 
 # Configure MySQL
 RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
-            sed -i 's|user.*|user            = $RUN_USER|' /etc/mysql/my.cnf && \
+            sed -i 's|user.*|user            = '"$RUN_USER"'|' /etc/mysql/my.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/my.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/my.cnf && \
             sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
@@ -132,7 +132,7 @@ RUN         cd /tmp && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${GUEST_APP_NAME}/checksetup.pl && \
             chown -R $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
-            sed -i "s|\$webservergroup.*|\$webservergroup = '$RUN_GROUP';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
+            sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
