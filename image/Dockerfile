@@ -132,7 +132,7 @@ RUN         cd /tmp && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${GUEST_APP_NAME}/checksetup.pl && \
             chown -R $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
-            sed -i "s|\$webservergroup.*|\$webservergroup = 'bugzilla';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
+            sed -i "s|\$webservergroup.*|\$webservergroup = '$RUN_GROUP';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
