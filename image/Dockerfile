@@ -15,8 +15,9 @@ ENV         GUEST_PORT $guestport
 ENV         GUEST_APP_NAME $guestappname
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME bugs
-ENV         DOWNLOAD_NAME bugzilla-5.0.4
-ENV         DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$DOWNLOAD_NAME.tar.gz
+ENV         BUGZILLA_DOWNLOAD_VERSION 5.0.4
+ENV         BUGZILLA_DOWNLOAD_NAME bugzilla-$BUGZILLA_DOWNLOAD_VERSION
+ENV         BUGZILLA_DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$BUGZILLA_DOWNLOAD_NAME.tar.gz
 
 COPY        . /tmp
 
@@ -122,10 +123,10 @@ RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-
 
 # Configure bugzilla
 RUN         cd /tmp && \
-            wget ${DOWNLOAD_URL} && \
-            tar xzf ${DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
-            rm ${DOWNLOAD_NAME}.tar.gz && \
-            mv /var/www/html/${DOWNLOAD_NAME} /var/www/html/${GUEST_APP_NAME} && \
+            wget ${BUGZILLA_DOWNLOAD_URL} && \
+            tar xzf ${BUGZILLA_DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
+            rm ${BUGZILLA_DOWNLOAD_NAME}.tar.gz && \
+            mv /var/www/html/${BUGZILLA_DOWNLOAD_NAME} /var/www/html/${GUEST_APP_NAME} && \
             rm -rf /var/www/html/${GUEST_APP_NAME}/data && \
             ln -s /bugzilla/data /var/www/html/${GUEST_APP_NAME}/data && \
             cd /var/www/html/${GUEST_APP_NAME} && \
