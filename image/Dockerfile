@@ -93,7 +93,7 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             sed -i 's|user.*|user            = '"$RUN_USER"'|' /etc/mysql/my.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/my.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/my.cnf && \
-            sed -i 's|max_allowed_packet.*|max_allowed_packet      = 100M|' /etc/mysql/my.cnf && \
+            sed -i 's|max_allowed_packet.*|max_allowed_packet      = 8M|' /etc/mysql/my.cnf && \
             sed -i 's|myisam-recover.*|myisam-recover-options  = BACKUP|' /etc/mysql/my.cnf && \
             sed -i 's|log_error.*|log_error                = /var/log/mysql/dberror.log|' /etc/mysql/my.cnf && \
             sed -i '\|\[mysqld_safe\]|a log_error       = /var/log/mysql/dberror.log' /etc/mysql/my.cnf && \
@@ -101,7 +101,7 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             rm -rf /var/lib/mysql && \
             rm -rf /var/log/mysql && \
             ln -s /bugzilla/logs /var/log/mysql && \
-            chown -R $RUN_USER:$RUN_GROUP /var/log/mysql && \
+            chown -h $RUN_USER:$RUN_GROUP /var/log/mysql && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/mysqld
 
 # Configure apache
@@ -116,7 +116,7 @@ RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-
             a2ensite bugzilla && \
             rm -rf /var/log/apache2 && \
             ln -s /bugzilla/logs /var/log/apache2 && \
-            chown -R $RUN_USER:$RUN_GROUP /var/log/apache2 && \
+            chown -h $RUN_USER:$RUN_GROUP /var/log/apache2 && \
             chown -R $RUN_USER:$RUN_GROUP /var/lock/apache2 && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/apache2
 
@@ -132,6 +132,7 @@ RUN         cd /tmp && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${GUEST_APP_NAME}/checksetup.pl && \
             chown -R $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
+            chown -h $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME}/data && \
             sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
