@@ -123,7 +123,7 @@ RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-
 
 # Configure bugzilla
 RUN         cd /tmp && \
-            wget ${BUGZILLA_DOWNLOAD_URL} && \
+            wget -q -O ${BUGZILLA_DOWNLOAD_NAME}.tar.gz ${BUGZILLA_DOWNLOAD_URL} && \
             tar xzf ${BUGZILLA_DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
             rm ${BUGZILLA_DOWNLOAD_NAME}.tar.gz && \
             mv /var/www/html/${BUGZILLA_DOWNLOAD_NAME} /var/www/html/${GUEST_APP_NAME} && \
