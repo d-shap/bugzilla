@@ -103,6 +103,7 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             rm -rf /var/log/mysql && \
             ln -s /bugzilla/logs /var/log/mysql && \
             chown -h $RUN_USER:$RUN_GROUP /var/log/mysql && \
+            mkdir -p /var/run/mysqld && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/mysqld
 
 # Configure apache
@@ -118,7 +119,9 @@ RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-
             rm -rf /var/log/apache2 && \
             ln -s /bugzilla/logs /var/log/apache2 && \
             chown -h $RUN_USER:$RUN_GROUP /var/log/apache2 && \
+            mkdir -p /var/lock/apache2 && \
             chown -R $RUN_USER:$RUN_GROUP /var/lock/apache2 && \
+            mkdir -p /var/run/apache2 && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/apache2
 
 # Configure bugzilla
@@ -132,8 +135,7 @@ RUN         cd /tmp && \
             cd /var/www/html/${GUEST_APP_NAME} && \
             /usr/bin/perl install-module.pl --all && \
             /var/www/html/${GUEST_APP_NAME}/checksetup.pl && \
-            chown -R $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
-            chown -h $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME}/data && \
+            chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
             sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
