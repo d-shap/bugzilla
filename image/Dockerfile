@@ -9,12 +9,12 @@ ARG         guestappname=bugzilla
 ENV         DEBIAN_FRONTEND noninteractive
 ENV         RUN_USER bugzilla
 ENV         RUN_GROUP bugzilla
-ENV         APACHE_RUN_USER $RUN_USER
-ENV         APACHE_RUN_GROUP $RUN_GROUP
 ENV         GUEST_PORT $guestport
 ENV         GUEST_APP_NAME $guestappname
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME bugs
+ENV         APACHE_RUN_USER $RUN_USER
+ENV         APACHE_RUN_GROUP $RUN_GROUP
 ENV         BUGZILLA_DOWNLOAD_VERSION 5.0.4
 ENV         BUGZILLA_DOWNLOAD_NAME bugzilla-$BUGZILLA_DOWNLOAD_VERSION
 ENV         BUGZILLA_DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$BUGZILLA_DOWNLOAD_NAME.tar.gz
