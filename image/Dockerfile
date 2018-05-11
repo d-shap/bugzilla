@@ -126,21 +126,21 @@ RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-
 
 # Configure bugzilla
 RUN         cd /tmp && \
-            wget -q -O ${BUGZILLA_DOWNLOAD_NAME}.tar.gz ${BUGZILLA_DOWNLOAD_URL} && \
-            tar xzf ${BUGZILLA_DOWNLOAD_NAME}.tar.gz -C /var/www/html && \
-            rm ${BUGZILLA_DOWNLOAD_NAME}.tar.gz && \
-            mv /var/www/html/${BUGZILLA_DOWNLOAD_NAME} /var/www/html/${GUEST_APP_NAME} && \
-            rm -rf /var/www/html/${GUEST_APP_NAME}/data && \
-            ln -s /bugzilla/data /var/www/html/${GUEST_APP_NAME}/data && \
-            cd /var/www/html/${GUEST_APP_NAME} && \
+            wget -q -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
+            tar xzf $BUGZILLA_DOWNLOAD_NAME.tar.gz -C /var/www/html && \
+            rm $BUGZILLA_DOWNLOAD_NAME.tar.gz && \
+            mv /var/www/html/$BUGZILLA_DOWNLOAD_NAME /var/www/html/$GUEST_APP_NAME && \
+            rm -rf /var/www/html/$GUEST_APP_NAME/data && \
+            ln -s /bugzilla/data /var/www/html/$GUEST_APP_NAME/data && \
+            cd /var/www/html/$GUEST_APP_NAME && \
             /usr/bin/perl install-module.pl --all && \
-            /var/www/html/${GUEST_APP_NAME}/checksetup.pl && \
-            chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/${GUEST_APP_NAME} && \
-            sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
-            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
-            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
-            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/${GUEST_APP_NAME}/localconfig && \
-            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/${GUEST_APP_NAME}/localconfig
+            /var/www/html/$GUEST_APP_NAME/checksetup.pl && \
+            chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/$GUEST_APP_NAME && \
+            sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/$GUEST_APP_NAME/localconfig && \
+            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/$GUEST_APP_NAME/localconfig && \
+            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/$GUEST_APP_NAME/localconfig && \
+            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/$GUEST_APP_NAME/localconfig && \
+            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/$GUEST_APP_NAME/localconfig
 
 # Configure helper scripts
 RUN         mv /tmp/initialize /bugzilla/scripts && \
