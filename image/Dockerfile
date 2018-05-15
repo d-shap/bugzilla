@@ -3,13 +3,11 @@ MAINTAINER  Dmitry Shapovalov
 
 ARG         hostuid=967
 ARG         hostgid=967
-ARG         guestappname=bugzilla
 
 ENV         DEBIAN_FRONTEND noninteractive
 ENV         RUN_USER bugzilla
 ENV         RUN_GROUP bugzilla
 ENV         RUN_PORT 8007
-ENV         GUEST_APP_NAME $guestappname
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME bugs
 ENV         APACHE_RUN_USER $RUN_USER
@@ -109,7 +107,6 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
 RUN         sed -i 's|:80>|:'"$RUN_PORT"'>|' /etc/apache2/sites-available/000-default.conf && \
             sed -i 's|#ServerName www.example.com|ServerName localhost|' /etc/apache2/sites-available/000-default.conf && \
             mv /tmp/bugzilla.conf /etc/apache2/sites-available && \
-            sed -i 's|/guestappname|/'"$GUEST_APP_NAME"'|' /etc/apache2/sites-available/bugzilla.conf && \
             sed -i 's|Listen 80|Listen '"$RUN_PORT"'|' /etc/apache2/ports.conf && \
             echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
             a2enconf servername && \
@@ -128,18 +125,18 @@ RUN         cd /tmp && \
             wget -q -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
             tar xzf $BUGZILLA_DOWNLOAD_NAME.tar.gz -C /var/www/html && \
             rm $BUGZILLA_DOWNLOAD_NAME.tar.gz && \
-            mv /var/www/html/$BUGZILLA_DOWNLOAD_NAME /var/www/html/$GUEST_APP_NAME && \
-            rm -rf /var/www/html/$GUEST_APP_NAME/data && \
-            ln -s /bugzilla/data /var/www/html/$GUEST_APP_NAME/data && \
-            cd /var/www/html/$GUEST_APP_NAME && \
+            mv /var/www/html/$BUGZILLA_DOWNLOAD_NAME /var/www/html/bugzilla && \
+            rm -rf /var/www/html/bugzilla/data && \
+            ln -s /bugzilla/data /var/www/html/bugzilla/data && \
+            cd /var/www/html/bugzilla && \
             /usr/bin/perl install-module.pl --all && \
-            /var/www/html/$GUEST_APP_NAME/checksetup.pl && \
-            chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/$GUEST_APP_NAME && \
-            sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/$GUEST_APP_NAME/localconfig && \
-            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/$GUEST_APP_NAME/localconfig && \
-            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/$GUEST_APP_NAME/localconfig && \
-            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/$GUEST_APP_NAME/localconfig && \
-            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/$GUEST_APP_NAME/localconfig
+            /var/www/html/bugzilla/checksetup.pl && \
+            chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/bugzilla && \
+            sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/bugzilla/localconfig && \
+            sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/bugzilla/localconfig && \
+            sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/bugzilla/localconfig && \
+            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/bugzilla/localconfig && \
+            sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/bugzilla/localconfig
 
 # Configure helper scripts
 RUN         mv /tmp/initialize /bugzilla/scripts && \

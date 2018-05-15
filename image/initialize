@@ -9,7 +9,7 @@ setUserPassword() {
 }
 
 createDatabase() {
-    /var/www/html/$GUEST_APP_NAME/checksetup.pl
+    /var/www/html/bugzilla/checksetup.pl
     if [ $? -ne 0 ];
     then
         exit 1
