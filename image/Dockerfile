@@ -122,7 +122,7 @@ RUN         sed -i 's|:80>|:'"$RUN_PORT"'>|' /etc/apache2/sites-available/000-de
 
 # Configure bugzilla
 RUN         cd /tmp && \
-            wget -q -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
+            wget -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
             tar xzf $BUGZILLA_DOWNLOAD_NAME.tar.gz -C /var/www/html && \
             rm $BUGZILLA_DOWNLOAD_NAME.tar.gz && \
             mv /var/www/html/$BUGZILLA_DOWNLOAD_NAME /var/www/html/bugzilla && \
