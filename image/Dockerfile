@@ -3,13 +3,12 @@ MAINTAINER  Dmitry Shapovalov
 
 ARG         hostuid=967
 ARG         hostgid=967
-ARG         guestport=8007
 ARG         guestappname=bugzilla
 
 ENV         DEBIAN_FRONTEND noninteractive
 ENV         RUN_USER bugzilla
 ENV         RUN_GROUP bugzilla
-ENV         GUEST_PORT $guestport
+ENV         RUN_PORT 8007
 ENV         GUEST_APP_NAME $guestappname
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME bugs
@@ -107,11 +106,11 @@ RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/my.cnf && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/mysqld
 
 # Configure apache
-RUN         sed -i 's|:80>|:'"$GUEST_PORT"'>|' /etc/apache2/sites-available/000-default.conf && \
+RUN         sed -i 's|:80>|:'"$RUN_PORT"'>|' /etc/apache2/sites-available/000-default.conf && \
             sed -i 's|#ServerName www.example.com|ServerName localhost|' /etc/apache2/sites-available/000-default.conf && \
             mv /tmp/bugzilla.conf /etc/apache2/sites-available && \
             sed -i 's|/guestappname|/'"$GUEST_APP_NAME"'|' /etc/apache2/sites-available/bugzilla.conf && \
-            sed -i 's|Listen 80|Listen '"$GUEST_PORT"'|' /etc/apache2/ports.conf && \
+            sed -i 's|Listen 80|Listen '"$RUN_PORT"'|' /etc/apache2/ports.conf && \
             echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
             a2enconf servername && \
             a2enmod cgi expires headers rewrite && \
@@ -160,6 +159,6 @@ RUN         mv /tmp/initialize /bugzilla/scripts && \
 
 USER        $RUN_USER
 
-EXPOSE      $GUEST_PORT
+EXPOSE      $RUN_PORT
 
 ENTRYPOINT  ["/bugzilla/scripts/startup"]
