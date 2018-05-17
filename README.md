@@ -166,12 +166,17 @@ ProxyPreserveHost On
 
 ...
 
-ProxyPass /bugzilla http://localhost:8007/bugzilla
-ProxyPassReverse /bugzilla http://localhost:8007/bugzilla
-
-...
-
 </VirtualHost>
+```
+
+Copy **./etc/apache2/sites-available/bugzilla.conf** to **/etc/apache2/sites-available** folder:
+```
+sudo cp ./etc/apache2/sites-available/bugzilla.conf /etc/apache2/sites-available
+```
+
+Then enable apache site:
+```
+sudo a2ensite bugzilla
 ```
 
 Finally, restart apache service:
