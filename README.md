@@ -147,12 +147,12 @@ Bugzilla web server can be located with another web applications.
 For example, mercurial, bugzilla, wiki etc can be run as docker containers on the same host.
 In this case apache server can be used to redirect requests to different docker containers.
 
-First, mod_proxy should be enabled:
+Enable apache mod_proxy:
 ```
-sudo a2enmod proxy proxy_ajp proxy_http rewrite deflate headers proxy_balancer proxy_connect proxy_html
+sudo a2enmod proxy proxy_ajp proxy_html proxy_http rewrite deflate headers proxy_balancer proxy_connect
 ```
 
-Then configure proxy:
+Configure proxy:
 ```
 <VirtualHost *:80>
 
@@ -174,12 +174,12 @@ Copy **./etc/apache2/sites-available/bugzilla.conf** to **/etc/apache2/sites-ava
 sudo cp ./etc/apache2/sites-available/bugzilla.conf /etc/apache2/sites-available
 ```
 
-Then enable apache site:
+Enable apache bugzilla site:
 ```
 sudo a2ensite bugzilla
 ```
 
-Finally, restart apache service:
+Restart apache service:
 ```
 sudo service apache2 restart
 ```
