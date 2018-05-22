@@ -13,6 +13,22 @@ To run container next volumes should be mapped:
 
 Installation
 ------------
+### Installation from docker image
+Pull docker image.
+
+Create user and group to own bugzilla files and to run docker container:
+```
+sudo groupadd -g 967 bugzilla
+```
+```
+useradd -u 967 -g 967 -M bugzilla
+```
+
+Proceed to configuration.
+
+### Installation from source
+Pull project sources from version control system.
+
 Create user and group to own bugzilla files and to run docker container:
 ```
 sudo useradd -r bugzilla
@@ -28,6 +44,9 @@ Execute **build**:
 sudo ./build bugzilla
 ```
 
+Proceed to configuration.
+
+### Configuration
 Create folders for bugzilla database:
 ```
 sudo mkdir /bugzilla
