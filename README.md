@@ -260,3 +260,15 @@ docker run ... -e DB_USER_PASSWORD="pas\$11" ...
 ```
 sudo crontab -l | { cat; echo "minute hour * * * /usr/bin/bgutil backup <filename>"; echo ""; } | sudo crontab -
 ```
+
+Donate
+======
+I am a full time software developer.
+I code in my spare time and to extend the use of software that has purpose.
+
+If you find value in what I do then, please, feel free to donate to me.
+I'm not going to force you to donate, you can use my software completely free of charge.
+If you are really want to give something to me then you are welcome to do so.
+I don't expect donations, nor do I insist that you give them.
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/dshapovalov)
