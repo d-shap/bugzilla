@@ -1,5 +1,4 @@
-Bugzilla web server
-===================
+# Bugzilla web server
 Docker image for bugzilla web server.
 
 Container runs as non-root user.
@@ -11,8 +10,7 @@ To run container next volumes should be mapped:
 * log folder
 * backup folder
 
-Installation
-------------
+## Installation
 ### Installation from docker image
 Pull docker image.
 
@@ -136,8 +134,7 @@ Specify the following information:
 * administrator password
 * administrator password confirmation
 
-Management
-----------
+## Management
 ### Service management
 ```
 sudo service bugzilla (start|stop|status|restart)
@@ -160,8 +157,7 @@ sudo bgutil restore <filename>
 sudo bgutil bash
 ```
 
-Apache mod_proxy configuration
-------------------------------
+## Apache mod_proxy configuration
 Bugzilla web server can be located with another web applications.
 For example, mercurial, bugzilla, wiki etc can be run as docker containers on the same host.
 In this case apache server can be used to redirect requests to different docker containers.
@@ -203,8 +199,7 @@ Restart apache service:
 sudo service apache2 restart
 ```
 
-HOW TO
-------
+## HOW TO
 ### How to change database root password
 Stop bugzilla service:
 ```
@@ -261,6 +256,5 @@ docker run ... -e DB_USER_PASSWORD="pas\$11" ...
 sudo crontab -l | { cat; echo "minute hour * * * /usr/bin/bgutil backup <filename>"; echo ""; } | sudo crontab -
 ```
 
-Donation
-========
+# Donation
 If you find my code useful, you can [bye me a coffee](https://www.paypal.me/dshapovalov)
