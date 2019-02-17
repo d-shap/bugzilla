@@ -8,12 +8,11 @@ ENV         DEBIAN_FRONTEND noninteractive
 ENV         RUN_USER bugzilla
 ENV         RUN_GROUP bugzilla
 ENV         RUN_PORT 8007
-ENV         DB_NAME bugs
-ENV         DB_USER_NAME bugs
 ENV         APACHE_RUN_USER $RUN_USER
 ENV         APACHE_RUN_GROUP $RUN_GROUP
-ENV         BUGZILLA_DOWNLOAD_VERSION 5.0.4
-ENV         BUGZILLA_DOWNLOAD_NAME bugzilla-$BUGZILLA_DOWNLOAD_VERSION
+ENV         DB_NAME bugs
+ENV         DB_USER_NAME bugs
+ENV         BUGZILLA_DOWNLOAD_NAME bugzilla-5.0.4
 ENV         BUGZILLA_DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$BUGZILLA_DOWNLOAD_NAME.tar.gz
 
 COPY        . /tmp
