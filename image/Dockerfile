@@ -138,20 +138,14 @@ RUN         cd /tmp && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/bugzilla/localconfig
 
 # Configure helper scripts
-RUN         mv /tmp/initialize /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/initialize && \
-            mv /tmp/changeRootPassword /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/changeRootPassword && \
-            mv /tmp/changeUserPassword /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/changeUserPassword && \
-            mv /tmp/backup /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/backup && \
-            mv /tmp/restore /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/restore && \
-            mv /tmp/startup /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/startup && \
+RUN         mv /tmp/startup /bugzilla/scripts && \
             mv /tmp/shutdown /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/shutdown
+            mv /tmp/initialize /bugzilla/scripts && \
+            mv /tmp/changeRootPassword /bugzilla/scripts && \
+            mv /tmp/changeUserPassword /bugzilla/scripts && \
+            mv /tmp/backup /bugzilla/scripts && \
+            mv /tmp/restore /bugzilla/scripts && \
+            chmod a+x /bugzilla/scripts/*
 
 USER        $RUN_USER
 
