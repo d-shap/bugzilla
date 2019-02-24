@@ -12,8 +12,9 @@ ENV         APACHE_RUN_USER $RUN_USER
 ENV         APACHE_RUN_GROUP $RUN_GROUP
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME bugs
-ENV         BUGZILLA_DOWNLOAD_NAME bugzilla
 ENV         BUGZILLA_DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-5.0.4.tar.gz
+ENV         BUGZILLA_DOWNLOAD_NAME bugzilla-5.0.4
+ENV         BUGZILLA_FOLDER_NAME bugzilla-5.0.4
 
 COPY        . /tmp
 
@@ -124,7 +125,7 @@ RUN         cd /tmp && \
             wget -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
             tar xzf $BUGZILLA_DOWNLOAD_NAME.tar.gz -C /var/www/html && \
             rm $BUGZILLA_DOWNLOAD_NAME.tar.gz && \
-            mv /var/www/html/$BUGZILLA_DOWNLOAD_NAME /var/www/html/bugzilla && \
+            mv /var/www/html/$BUGZILLA_FOLDER_NAME /var/www/html/bugzilla && \
             rm -rf /var/www/html/bugzilla/data && \
             ln -s /bugzilla/data /var/www/html/bugzilla/data && \
             cd /var/www/html/bugzilla && \
@@ -145,7 +146,7 @@ RUN         mv /tmp/startup /bugzilla/scripts && \
             mv /tmp/changeUserPassword /bugzilla/scripts && \
             mv /tmp/backup /bugzilla/scripts && \
             mv /tmp/restore /bugzilla/scripts && \
-            chmod a+x /bugzilla/scripts/*
+            chmod 755 /bugzilla/scripts/*
 
 USER        $RUN_USER
 
