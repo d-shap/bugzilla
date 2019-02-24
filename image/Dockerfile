@@ -12,8 +12,8 @@ ENV         APACHE_RUN_USER $RUN_USER
 ENV         APACHE_RUN_GROUP $RUN_GROUP
 ENV         DB_NAME bugs
 ENV         DB_USER_NAME bugs
-ENV         BUGZILLA_DOWNLOAD_NAME bugzilla-5.0.4
-ENV         BUGZILLA_DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/$BUGZILLA_DOWNLOAD_NAME.tar.gz
+ENV         BUGZILLA_DOWNLOAD_NAME bugzilla
+ENV         BUGZILLA_DOWNLOAD_URL https://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-5.0.4.tar.gz
 
 COPY        . /tmp
 
