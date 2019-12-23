@@ -31,6 +31,7 @@ RUN         apt-get update && \
                 graphviz \
                 libgd-dev \
                 lynx-cur \
+                patchutils \
                 python-sphinx \
                 rst2pdf \
                 sendmail \
