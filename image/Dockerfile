@@ -32,6 +32,8 @@ RUN         apt-get update && \
                 python-sphinx \
                 rst2pdf \
                 sendmail \
+                sendmail-base \
+                sendmail-bin \
                 vim \
                 wget && \
             apt-get clean
