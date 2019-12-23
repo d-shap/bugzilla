@@ -22,8 +22,8 @@ COPY        . /tmp
 RUN         apt-get update && \
             apt-get install --assume-yes \
                 apache2 \
-                apache2-mpm-prefork \
                 build-essential \
+                default-libmysqlclient-dev \
                 graphviz \
                 libapache2-mod-perl2 \
                 libapache2-mod-perl2-dev \
@@ -51,9 +51,8 @@ RUN         apt-get update && \
                 libjson-rpc-perl \
                 libmath-random-isaac-perl \
                 libmath-random-isaac-xs-perl \
-                libmime-perl \
+                libmime-tools-perl \
                 libmodule-build-perl \
-                libmysqlclient-dev \
                 libnet-ldap-perl \
                 libsoap-lite-perl \
                 libtemplate-perl \
