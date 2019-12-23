@@ -23,7 +23,9 @@ RUN         apt-get update && \
             apt-get install --assume-yes \
                 apt-utils \
                 build-essential \
-                software-properties-common && \
+                software-properties-common \
+                vim \
+                wget && \
             apt-get update && \
             apt-get install --assume-yes \
                 graphviz \
@@ -33,9 +35,7 @@ RUN         apt-get update && \
                 rst2pdf \
                 sendmail \
                 sendmail-base \
-                sendmail-bin \
-                vim \
-                wget && \
+                sendmail-bin && \
             apt-get clean
 
 # Create user and group
