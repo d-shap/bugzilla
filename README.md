@@ -202,46 +202,46 @@ In this case apache server can be used to redirect requests to different docker 
 
 ## HOW TO
 ### How to change database root password
-Stop bugzilla service:
-```
-sudo service bugzilla stop
-```
+1. Stop bugzilla service:
+    ```
+    sudo service bugzilla stop
+    ```
 
-Specify new database root password in **/usr/sbin/bugzilla** file:
-```
-docker run ... -e DB_ROOT_PASSWORD="<new_password>" ...
-```
+2. Specify new database root password in **/usr/sbin/bugzilla** file:
+    ```
+    docker run ... -e DB_ROOT_PASSWORD="<new_password>" ...
+    ```
 
-Start bugzilla service:
-```
-sudo service bugzilla start
-```
+3. Start bugzilla service:
+    ```
+    sudo service bugzilla start
+    ```
 
-Run the following command:
-```
-sudo bgutil changeRootPassword "<old_password>"
-```
+4. Run the following command:
+    ```
+    sudo bgutil changeRootPassword "<old_password>"
+    ```
 
 ### How to change bugzilla database user password
-Stop bugzilla service:
-```
-sudo service bugzilla stop
-```
+1. Stop bugzilla service:
+    ```
+    sudo service bugzilla stop
+    ```
 
-Specify new bugzilla database user password in **/usr/sbin/bugzilla** file:
-```
-docker run ... -e DB_USER_PASSWORD="<new_password>" ...  
-```
+2. Specify new bugzilla database user password in **/usr/sbin/bugzilla** file:
+    ```
+    docker run ... -e DB_USER_PASSWORD="<new_password>" ...  
+    ```
 
-Start bugzilla service:
-```
-sudo service bugzilla start
-```
+3. Start bugzilla service:
+    ```
+    sudo service bugzilla start
+    ```
 
-Run the following command
-```
-sudo bgutil changeUserPassword
-```
+4. Run the following command
+    ```
+    sudo bgutil changeUserPassword
+    ```
 
 ### How to specify special characters in password
 Special characters should be escaped:
