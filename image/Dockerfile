@@ -154,7 +154,7 @@ RUN         cd /tmp && \
             ln -s /bugzilla/data /var/www/html/bugzilla/data && \
             cd /var/www/html/bugzilla && \
             /usr/bin/perl install-module.pl --all && \
-            /var/www/html/bugzilla/checksetup.pl && \
+            /usr/bin/perl checksetup.pl && \
             chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/bugzilla && \
             sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/bugzilla/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/bugzilla/localconfig && \
