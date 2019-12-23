@@ -58,6 +58,7 @@ RUN         apt-get update && \
                 libauthen-radius-perl \
                 libauthen-sasl-perl \
                 libcgi-pm-perl \
+                libcache-memcached-perl \
                 libchart-perl \
                 libconfig-yaml-perl \
                 libdaemon-generic-perl \
@@ -67,10 +68,13 @@ RUN         apt-get update && \
                 libdbi-perl \
                 libemail-mime-modifier-perl \
                 libemail-mime-perl \
+                libemail-reply-perl \
                 libemail-sender-perl \
                 libencode-detect-perl \
+                libfile-copy-recursive-perl \
                 libfile-mimeinfo-perl \
                 libfile-slurp-perl \
+                libfile-tail-perl \
                 libfile-which-perl \
                 libgd-graph-perl \
                 libhtml-formattext-withlinks-perl \
@@ -87,6 +91,7 @@ RUN         apt-get update && \
                 libtemplate-perl-doc \
                 libtemplate-plugin-gd-perl \
                 libtest-taint-perl \
+                libtext-patch-perl \
                 libtheschwartz-perl \
                 libxml-perl \
                 libxml-twig-perl \
