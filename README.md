@@ -134,6 +134,11 @@ Specify the following information:
 * administrator password
 * administrator password confirmation
 
+Restart bugzilla service:
+```
+sudo service bugzilla restart
+```
+
 ## Management
 ### Service management
 ```
