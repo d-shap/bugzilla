@@ -18,12 +18,15 @@ ENV         BUGZILLA_FOLDER_NAME bugzilla-5.0.6
 
 COPY        . /tmp
 
-# Install packages
+# Install common packages and configure environment
 RUN         apt-get update && \
             apt-get install --assume-yes \
-                apache2 \
+                apt-utils \
                 build-essential \
-                default-libmysqlclient-dev \
+                software-properties-common && \
+            apt-get update && \
+            apt-get install --assume-yes \
+                apache2 \
                 graphviz \
                 libapache2-mod-perl2 \
                 libapache2-mod-perl2-dev \
@@ -35,7 +38,6 @@ RUN         apt-get update && \
                 libdate-calc-perl \
                 libdatetime-perl \
                 libdatetime-timezone-perl \
-                libdbd-mysql-perl \
                 libdbi-perl \
                 libemail-mime-modifier-perl \
                 libemail-mime-perl \
@@ -63,8 +65,6 @@ RUN         apt-get update && \
                 libxml-perl \
                 libxml-twig-perl \
                 lynx-cur \
-                mysql-client \
-                mysql-server \
                 perlmagick \
                 python-sphinx \
                 rst2pdf \
@@ -77,7 +77,7 @@ RUN         apt-get update && \
 RUN         groupadd -g $hostgid $RUN_GROUP && \
             useradd -u $hostuid -g $hostgid -M $RUN_USER
 
-# Create folders for bugzilla
+# Configure application folders
 RUN         mkdir /bugzilla && \
             mkdir /bugzilla/db && \
             mkdir /bugzilla/data && \
@@ -86,8 +86,15 @@ RUN         mkdir /bugzilla && \
             mkdir /bugzilla/backups && \
             chown -R $RUN_USER:$RUN_GROUP /bugzilla
 
-# Configure MySQL
-RUN         sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/mariadb.conf.d/50-server.cnf && \
+# Install MySQL
+RUN         apt-get update && \
+            apt-get install --assume-yes \
+                default-libmysqlclient-dev \
+                libdbd-mysql-perl \
+                mysql-client \
+                mysql-server && \
+            apt-get clean
+            sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|user.*|user            = '"$RUN_USER"'|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|key_buffer.*|key_buffer_size         = 16M|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
