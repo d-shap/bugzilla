@@ -80,6 +80,7 @@ RUN         apt-get update && \
                 libmath-random-isaac-xs-perl \
                 libmime-tools-perl \
                 libmodule-build-perl \
+                libmodule-reader-perl \
                 libnet-ldap-perl \
                 libsoap-lite-perl \
                 libtemplate-perl \
@@ -91,7 +92,10 @@ RUN         apt-get update && \
                 libxml-twig-perl \
                 perlmagick && \
             apt-get clean && \
-            perl -MCPAN -e 'install CPAN'
+            /usr/bin/perl install-module.pl Cache::Memcached && \
+            /usr/bin/perl install-module.pl Email::Reply && \
+            /usr/bin/perl install-module.pl File::Copy::Recursive && \
+            /usr/bin/perl install-module.pl PatchReader
 
 # Install MySQL
 RUN         apt-get update && \
