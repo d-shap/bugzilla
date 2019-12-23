@@ -59,6 +59,8 @@ RUN         apt-get update && \
                 libauthen-sasl-perl \
                 libcgi-pm-perl \
                 libchart-perl \
+                libconfig-yaml-perl \
+                libdaemon-generic-perl \
                 libdate-calc-perl \
                 libdatetime-perl \
                 libdatetime-timezone-perl \
@@ -88,7 +90,8 @@ RUN         apt-get update && \
                 libxml-perl \
                 libxml-twig-perl \
                 perlmagick && \
-            apt-get clean
+            apt-get clean && \
+            perl -MCPAN -e 'install CPAN'
 
 # Install MySQL
 RUN         apt-get update && \
