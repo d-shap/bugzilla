@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ ! -d /bugzilla/db/mysql ];
 then
-    mysql_install_db
+    mysqld --initialize-insecure
 fi
 
 sed -i "s|\$db_pass.*|\$db_pass = '"$DB_USER_PASSWORD"';|" /var/www/html/bugzilla/localconfig
