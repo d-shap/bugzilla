@@ -91,11 +91,7 @@ RUN         apt-get update && \
                 libxml-perl \
                 libxml-twig-perl \
                 perlmagick && \
-            apt-get clean && \
-            /usr/bin/perl install-module.pl Cache::Memcached && \
-            /usr/bin/perl install-module.pl Email::Reply && \
-            /usr/bin/perl install-module.pl File::Copy::Recursive && \
-            /usr/bin/perl install-module.pl PatchReader
+            apt-get clean
 
 # Install MySQL
 RUN         apt-get update && \
