@@ -64,6 +64,7 @@ RUN         apt-get update && \
                 libxml-perl \
                 libxml-twig-perl \
                 lynx-cur \
+                mysql-client \
                 mysql-server \
                 perlmagick \
                 python-sphinx \
