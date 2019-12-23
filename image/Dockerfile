@@ -26,46 +26,9 @@ RUN         apt-get update && \
                 software-properties-common && \
             apt-get update && \
             apt-get install --assume-yes \
-                apache2 \
                 graphviz \
-                libapache2-mod-perl2 \
-                libapache2-mod-perl2-dev \
-                libappconfig-perl \
-                libauthen-radius-perl \
-                libauthen-sasl-perl \
-                libcgi-pm-perl \
-                libchart-perl \
-                libdate-calc-perl \
-                libdatetime-perl \
-                libdatetime-timezone-perl \
-                libdbi-perl \
-                libemail-mime-modifier-perl \
-                libemail-mime-perl \
-                libemail-sender-perl \
-                libencode-detect-perl \
-                libfile-mimeinfo-perl \
-                libfile-slurp-perl \
-                libfile-which-perl \
                 libgd-dev \
-                libgd-graph-perl \
-                libhtml-formattext-withlinks-perl \
-                libhtml-scrubber-perl \
-                libjson-rpc-perl \
-                libmath-random-isaac-perl \
-                libmath-random-isaac-xs-perl \
-                libmime-tools-perl \
-                libmodule-build-perl \
-                libnet-ldap-perl \
-                libsoap-lite-perl \
-                libtemplate-perl \
-                libtemplate-perl-doc \
-                libtemplate-plugin-gd-perl \
-                libtest-taint-perl \
-                libtheschwartz-perl \
-                libxml-perl \
-                libxml-twig-perl \
                 lynx-cur \
-                perlmagick \
                 python-sphinx \
                 rst2pdf \
                 sendmail \
@@ -86,6 +49,45 @@ RUN         mkdir /bugzilla && \
             mkdir /bugzilla/backups && \
             chown -R $RUN_USER:$RUN_GROUP /bugzilla
 
+# Install Perl
+RUN         apt-get update && \
+            apt-get install --assume-yes \
+                libappconfig-perl \
+                libauthen-radius-perl \
+                libauthen-sasl-perl \
+                libcgi-pm-perl \
+                libchart-perl \
+                libdate-calc-perl \
+                libdatetime-perl \
+                libdatetime-timezone-perl \
+                libdbi-perl \
+                libemail-mime-modifier-perl \
+                libemail-mime-perl \
+                libemail-sender-perl \
+                libencode-detect-perl \
+                libfile-mimeinfo-perl \
+                libfile-slurp-perl \
+                libfile-which-perl \
+                libgd-graph-perl \
+                libhtml-formattext-withlinks-perl \
+                libhtml-scrubber-perl \
+                libjson-rpc-perl \
+                libmath-random-isaac-perl \
+                libmath-random-isaac-xs-perl \
+                libmime-tools-perl \
+                libmodule-build-perl \
+                libnet-ldap-perl \
+                libsoap-lite-perl \
+                libtemplate-perl \
+                libtemplate-perl-doc \
+                libtemplate-plugin-gd-perl \
+                libtest-taint-perl \
+                libtheschwartz-perl \
+                libxml-perl \
+                libxml-twig-perl \
+                perlmagick && \
+            apt-get clean
+
 # Install MySQL
 RUN         apt-get update && \
             apt-get install --assume-yes \
@@ -93,7 +95,7 @@ RUN         apt-get update && \
                 libdbd-mysql-perl \
                 mysql-client \
                 mysql-server && \
-            apt-get clean
+            apt-get clean && \
             sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|user.*|user            = '"$RUN_USER"'|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|datadir.*|datadir         = /bugzilla/db|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
@@ -110,8 +112,14 @@ RUN         apt-get update && \
             mkdir -p /var/run/mysqld && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/mysqld
 
-# Configure apache
-RUN         sed -i 's|:80>|:'"$RUN_PORT"'>|' /etc/apache2/sites-available/000-default.conf && \
+# Install Apache
+RUN         apt-get update && \
+            apt-get install --assume-yes \
+                apache2 \
+                libapache2-mod-perl2 \
+                libapache2-mod-perl2-dev && \
+            apt-get clean && \
+            sed -i 's|:80>|:'"$RUN_PORT"'>|' /etc/apache2/sites-available/000-default.conf && \
             sed -i 's|#ServerName www.example.com|ServerName localhost|' /etc/apache2/sites-available/000-default.conf && \
             mv /tmp/bugzilla.conf /etc/apache2/sites-available && \
             sed -i 's|Listen 80|Listen '"$RUN_PORT"'|' /etc/apache2/ports.conf && \
@@ -127,7 +135,7 @@ RUN         sed -i 's|:80>|:'"$RUN_PORT"'>|' /etc/apache2/sites-available/000-de
             mkdir -p /var/run/apache2 && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/apache2
 
-# Configure bugzilla
+# Configure app
 RUN         cd /tmp && \
             wget -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
             tar xzf $BUGZILLA_DOWNLOAD_NAME.tar.gz -C /var/www/html && \
