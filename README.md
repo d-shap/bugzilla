@@ -12,132 +12,132 @@ To run container next volumes should be mapped:
 
 ## Installation
 ### Installation from docker image
-Pull docker image.
+1. Pull docker image.
 
-Create user and group to own bugzilla files and to run docker container:
-```
-sudo groupadd -g 967 bugzilla
-```
-```
-useradd -u 967 -g 967 -M bugzilla
-```
+2. Create user and group to own bugzilla files and to run docker container:
+    ```
+    sudo groupadd -g 967 bugzilla
+    ```
+    ```
+    useradd -u 967 -g 967 -M bugzilla
+    ```
 
-Proceed to configuration.
+3. Proceed to configuration.
 
 ### Installation from source
-Pull project sources from version control system.
+1. Pull project sources from version control system.
 
-Create user and group to own bugzilla files and to run docker container:
-```
-sudo useradd -r bugzilla
-```
+2. Create user and group to own bugzilla files and to run docker container:
+    ```
+    sudo useradd -r bugzilla
+    ```
 
-Make **build** executable:
-```
-sudo chmod u+x ./build
-```
+3. Make **build** executable:
+    ```
+    sudo chmod u+x ./build
+    ```
 
-Execute **build**:
-```
-sudo ./build bugzilla
-```
+4. Execute **build**:
+    ```
+    sudo ./build bugzilla
+    ```
 
-Proceed to configuration.
+5. Proceed to configuration.
 
 ### Configuration
-Create folders for bugzilla database:
-```
-sudo mkdir /bugzilla
-```
-```
-sudo mkdir /bugzilla/db
-```
-```
-sudo mkdir /bugzilla/data
-```
+1. Create folders for bugzilla database:
+    ```
+    sudo mkdir /bugzilla
+    ```
+    ```
+    sudo mkdir /bugzilla/db
+    ```
+    ```
+    sudo mkdir /bugzilla/data
+    ```
 
-Create folder for logs:
-```
-sudo mkdir /var/log/bugzilla
-```
+2. Create folder for logs:
+    ```
+    sudo mkdir /var/log/bugzilla
+    ```
 
-Create folder for backups:
-```
-sudo mkdir /var/backups/bugzilla
-```
+3. Create folder for backups:
+    ```
+    sudo mkdir /var/backups/bugzilla
+    ```
 
-Grant permit to all folders:
-```
-sudo chown -R bugzilla:bugzilla /bugzilla
-```
-```
-sudo chown bugzilla:bugzilla /var/log/bugzilla
-```
-```
-sudo chown bugzilla:bugzilla /var/backups/bugzilla
-```
+4. Grant permit to all folders:
+    ```
+    sudo chown -R bugzilla:bugzilla /bugzilla
+    ```
+    ```
+    sudo chown bugzilla:bugzilla /var/log/bugzilla
+    ```
+    ```
+    sudo chown bugzilla:bugzilla /var/backups/bugzilla
+    ```
 
-Copy **etc/init.d/bugzilla** to **/etc/init.d** folder:
-```
-sudo cp ./etc/init.d/bugzilla /etc/init.d
-```
+5. Copy **etc/init.d/bugzilla** to **/etc/init.d** folder:
+    ```
+    sudo cp ./etc/init.d/bugzilla /etc/init.d
+    ```
 
-Copy **usr/sbin/bugzilla** to **/usr/sbin** folder:
-```
-sudo cp ./usr/sbin/bugzilla /usr/sbin
-```
+6. Copy **usr/sbin/bugzilla** to **/usr/sbin** folder:
+    ```
+    sudo cp ./usr/sbin/bugzilla /usr/sbin
+    ```
 
-Copy **usr/bin/bgutil** to **/usr/bin** folder:
-```
-sudo cp ./usr/bin/bgutil /usr/bin
-```
+7. Copy **usr/bin/bgutil** to **/usr/bin** folder:
+    ```
+    sudo cp ./usr/bin/bgutil /usr/bin
+    ```
 
-Make all files executable:
-```
-sudo chmod a+x /etc/init.d/bugzilla
-```
-```
-sudo chmod a+x /usr/sbin/bugzilla
-```
-```
-sudo chmod a+x /usr/bin/bgutil
-```
+8. Make all files executable:
+    ```
+    sudo chmod a+x /etc/init.d/bugzilla
+    ```
+    ```
+    sudo chmod a+x /usr/sbin/bugzilla
+    ```
+    ```
+    sudo chmod a+x /usr/bin/bgutil
+    ```
 
-Register service:
-```
-sudo update-rc.d bugzilla defaults
-```
+9. Register service:
+    ```
+    sudo update-rc.d bugzilla defaults
+    ```
 
-Specify database root password in **/usr/sbin/bugzilla** file:
-```
-docker run ... -e DB_ROOT_PASSWORD="<some_password>" ...
-```
+10. Specify database root password in **/usr/sbin/bugzilla** file:
+    ```
+    docker run ... -e DB_ROOT_PASSWORD="<some_password>" ...
+    ```
 
-Specify bugzilla database user password in **/usr/sbin/bugzilla** file:
-```
-docker run ... -e DB_USER_PASSWORD="<some_password>" ...  
-```
+11. Specify bugzilla database user password in **/usr/sbin/bugzilla** file:
+    ```
+    docker run ... -e DB_USER_PASSWORD="<some_password>" ...  
+    ```
 
-Start bugzilla service:
-```
-sudo service bugzilla start
-```
+12. Start bugzilla service:
+    ```
+    sudo service bugzilla start
+    ```
 
-Initialize bugzilla database:
-```
-sudo bgutil initialize
-```
+13. Initialize bugzilla database:
+    ```
+    sudo bgutil initialize
+    ```
 
-Specify the following information:
-* administrator e-mail
-* administrator name
-* administrator password
-* administrator password confirmation
+    Specify the following information:
+    * administrator e-mail
+    * administrator name
+    * administrator password
+    * administrator password confirmation
 
-Restart bugzilla service:
-```
-sudo service bugzilla restart
-```
+14. Restart bugzilla service:
+    ```
+    sudo service bugzilla restart
+    ```
 
 ## Management
 ### Service management
