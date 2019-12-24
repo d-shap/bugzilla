@@ -12,9 +12,9 @@ ENV         DEBIAN_FRONTEND=noninteractive \
             APACHE_RUN_GROUP=$RUN_GROUP \
             DB_NAME=bugs \
             DB_USER_NAME=bugs \
-            BUGZILLA_DOWNLOAD_URL=https://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-5.0.6.tar.gz \
-            BUGZILLA_DOWNLOAD_NAME=bugzilla-5.0.6 \
-            BUGZILLA_FOLDER_NAME=bugzilla-5.0.6
+            BUGZILLA_DOWNLOAD_URL="https://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-5.0.6.tar.gz" \
+            BUGZILLA_DOWNLOAD_NAME="bugzilla-5.0.6" \
+            BUGZILLA_FOLDER_NAME="bugzilla-5.0.6"
 
 COPY        . /tmp
 
