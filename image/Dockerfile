@@ -24,6 +24,7 @@ RUN         apt-get update && \
                 apt-utils \
                 build-essential \
                 software-properties-common \
+                unzip \
                 vim \
                 wget && \
             apt-get update && \
