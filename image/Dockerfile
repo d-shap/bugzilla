@@ -68,6 +68,7 @@ RUN         apt-get update && \
                 libdatetime-perl \
                 libdatetime-timezone-perl \
                 libdbi-perl \
+                libemail-address-perl \
                 libemail-mime-modifier-perl \
                 libemail-mime-perl \
                 libemail-reply-perl \
@@ -155,7 +156,6 @@ RUN         cd /tmp && \
             ln -s /bugzilla/data /var/www/html/bugzilla/data && \
             cd /var/www/html/bugzilla && \
             /usr/bin/perl install-module.pl --all && \
-            /usr/bin/perl install-module.pl Email::Address && \
             /usr/bin/perl install-module.pl PatchReader && \
             /usr/bin/perl checksetup.pl && \
             chown -R -h $RUN_USER:$RUN_GROUP /var/www/html/bugzilla && \
