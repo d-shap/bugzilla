@@ -103,9 +103,9 @@ RUN         apt-get update && \
 RUN         apt-get update && \
             apt-get install --assume-yes \
                 default-libmysqlclient-dev \
-                libdbd-mysql-perl \
-                mysql-client \
-                mysql-server && \
+                default-mysql-client \
+                default-mysql-server \
+                libdbd-mysql-perl && \
             apt-get clean && \
             sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|user.*|user            = '"$RUN_USER"'|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
