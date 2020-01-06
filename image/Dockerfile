@@ -31,7 +31,7 @@ RUN         apt-get update && \
             apt-get install --assume-yes \
                 graphviz \
                 libgd-dev \
-                lynx-cur \
+                lynx \
                 patchutils \
                 python-sphinx \
                 rst2pdf \
