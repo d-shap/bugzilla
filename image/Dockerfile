@@ -90,7 +90,6 @@ RUN         apt-get update && \
                 libnet-ldap-perl \
                 libsoap-lite-perl \
                 libtemplate-perl \
-                libtemplate-perl-doc \
                 libtemplate-plugin-gd-perl \
                 libtest-taint-perl \
                 libtext-patch-perl \
