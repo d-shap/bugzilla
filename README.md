@@ -8,7 +8,7 @@ To run container next volumes should be mapped:
 * folder for SQL database
 * folder for bugzilla files
 * log folder
-* backup folder
+* backups folder
 
 ## Installation
 ### Installation from docker image
