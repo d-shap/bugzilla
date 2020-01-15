@@ -45,7 +45,7 @@ To run container next volumes should be mapped:
 5. Proceed to configuration.
 
 ### Configuration
-1. Create folders for bugzilla database:
+1. Create folders for bugzilla files:
     ```
     sudo mkdir /bugzilla
     ```
