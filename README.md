@@ -2,11 +2,11 @@
 Docker image for bugzilla web server.
 
 Container runs as non-root user.
-This user owns bugzilla process and owns bugzilla database.
+This user owns bugzilla process and owns bugzilla files.
 
 To run container next volumes should be mapped:
 * folder for SQL database
-* folder for bugzilla data
+* folder for bugzilla files
 * log folder
 * backup folder
 
