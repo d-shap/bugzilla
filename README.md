@@ -169,7 +169,7 @@ In this case apache server can be used to redirect requests to different docker 
 
 1. Enable apache mod_proxy:
     ```
-    sudo a2enmod proxy proxy_ajp proxy_html proxy_http rewrite deflate headers proxy_balancer proxy_connect
+    sudo a2enmod deflate headers proxy proxy_ajp proxy_balancer proxy_connect proxy_html proxy_http rewrite
     ```
 
 2. Configure proxy:
@@ -190,7 +190,7 @@ In this case apache server can be used to redirect requests to different docker 
     sudo cp ./etc/apache2/sites-available/bugzilla.conf /etc/apache2/sites-available
     ```
 
-4. Enable apache bugzilla site:
+4. Enable apache sites:
     ```
     sudo a2ensite bugzilla
     ```
