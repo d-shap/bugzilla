@@ -13,7 +13,6 @@ To run container next volumes should be mapped:
 ## Installation
 ### Installation from docker image
 1. Pull docker image.
-
 2. Create user and group to own bugzilla files and to run docker container:
     ```
     sudo groupadd -g 967 bugzilla
@@ -21,27 +20,22 @@ To run container next volumes should be mapped:
     ```
     useradd -u 967 -g 967 -M bugzilla
     ```
-
 3. Proceed to configuration.
 
 ### Installation from source
 1. Pull project sources from version control system.
-
 2. Create user and group to own bugzilla files and to run docker container:
     ```
     sudo useradd -r bugzilla
     ```
-
 3. Make **build** executable:
     ```
     sudo chmod u+x ./build
     ```
-
 4. Execute **build**:
     ```
     sudo ./build bugzilla
     ```
-
 5. Proceed to configuration.
 
 ### Configuration
@@ -55,17 +49,14 @@ To run container next volumes should be mapped:
     ```
     sudo mkdir /bugzilla/data
     ```
-
 2. Create folder for logs:
     ```
     sudo mkdir /var/log/bugzilla
     ```
-
 3. Create folder for backups:
     ```
     sudo mkdir /var/backups/bugzilla
     ```
-
 4. Grant permit to all folders:
     ```
     sudo chown -R bugzilla:bugzilla /bugzilla
@@ -76,22 +67,18 @@ To run container next volumes should be mapped:
     ```
     sudo chown bugzilla:bugzilla /var/backups/bugzilla
     ```
-
 5. Copy **etc/init.d/bugzilla** to **/etc/init.d** folder:
     ```
     sudo cp ./etc/init.d/bugzilla /etc/init.d
     ```
-
 6. Copy **usr/sbin/bugzilla** to **/usr/sbin** folder:
     ```
     sudo cp ./usr/sbin/bugzilla /usr/sbin
     ```
-
 7. Copy **usr/bin/bgutil** to **/usr/bin** folder:
     ```
     sudo cp ./usr/bin/bgutil /usr/bin
     ```
-
 8. Make all files executable:
     ```
     sudo chmod a+x /etc/init.d/bugzilla
@@ -102,38 +89,31 @@ To run container next volumes should be mapped:
     ```
     sudo chmod a+x /usr/bin/bgutil
     ```
-
 9. Register service:
     ```
     sudo update-rc.d bugzilla defaults
     ```
-
 10. Specify database root password in **/usr/sbin/bugzilla** file:
     ```
     docker run ... -e DB_ROOT_PASSWORD="<some_password>" ...
     ```
-
 11. Specify bugzilla database user password in **/usr/sbin/bugzilla** file:
     ```
     docker run ... -e DB_USER_PASSWORD="<some_password>" ...  
     ```
-
 12. Start bugzilla service:
     ```
     sudo service bugzilla start
     ```
-
 13. Initialize bugzilla database:
     ```
     sudo bgutil initialize
     ```
-
     Specify the following information:
     * administrator e-mail
     * administrator name
     * administrator password
     * administrator password confirmation
-
 14. Restart bugzilla service:
     ```
     sudo service bugzilla restart
@@ -171,7 +151,6 @@ In this case apache server can be used to redirect requests to different docker 
     ```
     sudo a2enmod deflate headers proxy proxy_ajp proxy_balancer proxy_connect proxy_html proxy_http rewrite
     ```
-
 2. Configure proxy:
     ```
     <VirtualHost *:80>
@@ -184,17 +163,14 @@ In this case apache server can be used to redirect requests to different docker 
         ...
     </VirtualHost>
     ```
-
 3. Copy **./etc/apache2/sites-available/bugzilla.conf** to **/etc/apache2/sites-available** folder:
     ```
     sudo cp ./etc/apache2/sites-available/bugzilla.conf /etc/apache2/sites-available
     ```
-
 4. Enable apache sites:
     ```
     sudo a2ensite bugzilla
     ```
-
 5. Restart apache service:
     ```
     sudo service apache2 restart
@@ -206,17 +182,14 @@ In this case apache server can be used to redirect requests to different docker 
     ```
     sudo service bugzilla stop
     ```
-
 2. Specify new database root password in **/usr/sbin/bugzilla** file:
     ```
     docker run ... -e DB_ROOT_PASSWORD="<new_password>" ...
     ```
-
 3. Start bugzilla service:
     ```
     sudo service bugzilla start
     ```
-
 4. Run the following command:
     ```
     sudo bgutil changeRootPassword "<old_password>"
@@ -227,17 +200,14 @@ In this case apache server can be used to redirect requests to different docker 
     ```
     sudo service bugzilla stop
     ```
-
 2. Specify new bugzilla database user password in **/usr/sbin/bugzilla** file:
     ```
     docker run ... -e DB_USER_PASSWORD="<new_password>" ...  
     ```
-
 3. Start bugzilla service:
     ```
     sudo service bugzilla start
     ```
-
 4. Run the following command
     ```
     sudo bgutil changeUserPassword
