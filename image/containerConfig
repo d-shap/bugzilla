@@ -1,6 +1,8 @@
 #!/bin/bash
-startWebCmd="/mercurial/scripts/webStartup"
-stopWebCmd="/mercurial/scripts/webShutdown"
-startDummyCmd="/mercurial/scripts/containerDummy"
+startDbCmd="mysqld"
+stopDbCmd="mysqladmin --user=root --password="$DB_ROOT_PASSWORD" shutdown"
+startWebCmd="/bugzilla/scripts/webStartup"
+stopWebCmd="/bugzilla/scripts/webShutdown"
+startDummyCmd="/bugzilla/scripts/containerDummy"
 waitDummyCmd="ps axf | grep containerDummy | grep -v grep | awk '{print \"wait \" \$1}' | sh"
 stopDummyCmd="ps axf | grep containerDummy | grep -v grep | awk '{print \"kill -9 \" \$1}' | sh"
