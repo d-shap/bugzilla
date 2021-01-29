@@ -23,8 +23,10 @@ RUN         apt-get update && \
             apt-get install --assume-yes \
                 apt-utils \
                 build-essential \
+                cron \
+                net-tools \
+                procps \
                 software-properties-common \
-                unzip \
                 vim \
                 wget && \
             apt-get update && \
@@ -166,17 +168,21 @@ RUN         cd /tmp && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/bugzilla/localconfig
 
 # Configure helper scripts
-RUN         mv /tmp/startup /bugzilla/scripts && \
-            mv /tmp/shutdown /bugzilla/scripts && \
-            mv /tmp/initialize /bugzilla/scripts && \
-            mv /tmp/changeRootPassword /bugzilla/scripts && \
-            mv /tmp/changeUserPassword /bugzilla/scripts && \
-            mv /tmp/backup /bugzilla/scripts && \
-            mv /tmp/restore /bugzilla/scripts && \
+RUN         mv /tmp/containerConfig /bugzilla/scripts && \
+            mv /tmp/containerDummy /bugzilla/scripts && \
+            mv /tmp/containerStartup /bugzilla/scripts && \
+            mv /tmp/containerShutdown /bugzilla/scripts && \
+            mv /tmp/webStartup /bugzilla/scripts && \
+            mv /tmp/webShutdown /bugzilla/scripts && \
+            mv /tmp/utilInitialize /bugzilla/scripts && \
+            mv /tmp/utilChangeRootPassword /bugzilla/scripts && \
+            mv /tmp/utilChangeUserPassword /bugzilla/scripts && \
+            mv /tmp/utilBackup /bugzilla/scripts && \
+            mv /tmp/utilRestore /bugzilla/scripts && \
             chmod 755 /bugzilla/scripts/*
 
 USER        $RUN_USER
 
 EXPOSE      $RUN_PORT
 
-ENTRYPOINT  ["/bugzilla/scripts/startup"]
+ENTRYPOINT  ["/bugzilla/scripts/containerStartup"]
