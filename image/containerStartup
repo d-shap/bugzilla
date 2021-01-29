@@ -6,8 +6,8 @@ fi
 
 sed -i "s|\$db_pass.*|\$db_pass = '"$DB_USER_PASSWORD"';|" /var/www/html/bugzilla/localconfig
 
-trap /bugzilla/scripts/shutdown SIGHUP SIGINT SIGTERM TERM
+trap /bugzilla/scripts/shutdown HUP SIGHUP INT SIGINT QUIT SIGQUIT TERM SIGTERM
 
-startMySQLCmd="mysqld"
-startApacheCmd="apache2ctl -D FOREGROUND"
-$startMySQLCmd & $startApacheCmd & wait
+source /bugzilla/scripts/containerConfig
+$startDbCmd & $startWebCmd & $startDummyCmd
+eval $waitDummyCmd
