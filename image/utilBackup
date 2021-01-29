@@ -6,13 +6,19 @@ then
     DUMPFILE="/bugzilla/$DUMP"
     TEMPTILE="/bugzilla/backups/tmp_$1.tar.gz"
     FILE="/bugzilla/backups/$1.tar.gz"
+    source /bugzilla/scripts/containerConfig
+
+    $stopWebCmd
 
     mysqldump --max-allowed-packet=100M --user="$DB_USER_NAME" --password="$DB_USER_PASSWORD" "$DB_NAME" > $TEMPDUMPFILE
     mv $TEMPDUMPFILE $DUMPFILE
 
     cd /bugzilla
     tar -czf $TEMPTILE $DUMP data
+    rm -rf $FILE
     mv $TEMPTILE $FILE
 
     rm $DUMPFILE
+
+    $startWebCmd
 fi
