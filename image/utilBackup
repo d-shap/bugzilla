@@ -4,7 +4,7 @@ then
     DUMP="$DB_NAME.dump"
     TEMPDUMPFILE="/bugzilla/tmp_$DUMP"
     DUMPFILE="/bugzilla/$DUMP"
-    TEMPTILE="/bugzilla/backups/tmp_$1.tar.gz"
+    TEMPFILE="/bugzilla/backups/tmp_$1.tar.gz"
     FILE="/bugzilla/backups/$1.tar.gz"
     source /bugzilla/scripts/containerConfig
 
@@ -14,9 +14,9 @@ then
     mv $TEMPDUMPFILE $DUMPFILE
 
     cd /bugzilla
-    tar -czf $TEMPTILE $DUMP data
+    tar -czf $TEMPFILE $DUMP data
     rm -rf $FILE
-    mv $TEMPTILE $FILE
+    mv $TEMPFILE $FILE
 
     rm $DUMPFILE
 
