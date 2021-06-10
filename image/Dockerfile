@@ -8,8 +8,8 @@ ENV         DEBIAN_FRONTEND=noninteractive \
             RUN_USER=bugzilla \
             RUN_GROUP=bugzilla \
             RUN_PORT=8007 \
-            APACHE_RUN_USER=$RUN_USER \
-            APACHE_RUN_GROUP=$RUN_GROUP \
+            APACHE_RUN_USER=bugzilla \
+            APACHE_RUN_GROUP=bugzilla \
             DB_NAME=bugs \
             DB_USER_NAME=bugs \
             BUGZILLA_DOWNLOAD_URL="https://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-5.0.6.tar.gz" \
@@ -24,6 +24,7 @@ RUN         apt-get update && \
                 apt-utils \
                 build-essential \
                 cron \
+                curl \
                 net-tools \
                 procps \
                 software-properties-common \
