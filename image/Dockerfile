@@ -12,8 +12,6 @@ ENV         DEBIAN_FRONTEND=noninteractive \
             APACHE_RUN_GROUP="bugzilla" \
             DB_NAME="bugs" \
             DB_USER_NAME="bugs" \
-            BUGZILLA_DOWNLOAD_URL="https://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-5.0.6.tar.gz" \
-            BUGZILLA_DOWNLOAD_NAME="bugzilla-5.0.6" \
             BUGZILLA_FOLDER_NAME="bugzilla-5.0.6"
 
 COPY        . /tmp
@@ -150,11 +148,10 @@ RUN         apt-get update && \
             mkdir -p /var/run/apache2 && \
             chown -R $RUN_USER:$RUN_GROUP /var/run/apache2
 
-# Configure app
-RUN         cd /tmp && \
-            wget -O $BUGZILLA_DOWNLOAD_NAME.tar.gz $BUGZILLA_DOWNLOAD_URL && \
-            tar xzf $BUGZILLA_DOWNLOAD_NAME.tar.gz -C /var/www/html && \
-            rm $BUGZILLA_DOWNLOAD_NAME.tar.gz && \
+# Configure bugzilla
+RUN         tar xzf /tmp/bin/$BUGZILLA_FOLDER_NAME.tar.gz -C /var/www/html && \
+            rm /tmp/bin/$BUGZILLA_FOLDER_NAME.tar.gz && \
+            rm -rf /tmp/bin && \
             mv /var/www/html/$BUGZILLA_FOLDER_NAME /var/www/html/bugzilla && \
             rm -rf /var/www/html/bugzilla/data && \
             ln -s /bugzilla/data /var/www/html/bugzilla/data && \
