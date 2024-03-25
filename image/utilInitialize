@@ -38,6 +38,5 @@ case $1 in
         setRootPassword
         setUserPassword
         createDatabase
-        checkSetup
         ;;
 esac
