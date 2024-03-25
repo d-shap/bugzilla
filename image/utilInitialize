@@ -17,6 +17,10 @@ createDatabase() {
     mysql --user=root --password="$DB_ROOT_PASSWORD" -e "USE $DB_NAME; ALTER TABLE attachments AVG_ROW_LENGTH=1000000, MAX_ROWS=20000;"
 }
 
+checkSetup() {
+    /var/www/html/bugzilla/checksetup.pl
+}
+
 case $1 in
     setRootPassword)
         setRootPassword
@@ -27,9 +31,13 @@ case $1 in
     createDatabase)
         createDatabase
         ;;
+    checkSetup)
+        checkSetup
+        ;;
     *)
         setRootPassword
         setUserPassword
         createDatabase
+        checkSetup
         ;;
 esac
