@@ -12,7 +12,13 @@ ENV         DEBIAN_FRONTEND=noninteractive \
             APACHE_RUN_GROUP="bugzilla" \
             DB_NAME="bugs" \
             DB_USER_NAME="bugs" \
-            BUGZILLA_FOLDER_NAME="bugzilla-5.0.6"
+            BUGZILLA_FOLDER_NAME="bugzilla-5.0.6" \
+            BAYOTEERS_BAYOT_BASE_FOLDER_NAME="bayoteers-BayotBase-01b4267" \
+            BAYOTEERS_ACTIVITY_GRAPH_FOLDER_NAME="bayoteers-ActivityGraph-d98ff7a" \
+            BAYOTEERS_AGILE_TOOLS_FOLDER_NAME="bayoteers-AgileTools-e4b1b21" \
+            BAYOTEERS_BUG_VIEW_PLUS_FOLDER_NAME="bayoteers-BugViewPlus-6bc03d6" \
+            BAYOTEERS_FIELD_VISIBILITY_FOLDER_NAME="bayoteers-FieldVisibility-b696eb1" \
+            BAYOTEERS_SEE_ALSO_PLUS_FOLDER_NAME="bayoteers-SeeAlsoPlus-92eaa19"
 
 COPY        . /tmp
 
@@ -151,7 +157,6 @@ RUN         apt-get update && \
 # Configure bugzilla
 RUN         tar xzf /tmp/bin/$BUGZILLA_FOLDER_NAME.tar.gz -C /var/www/html && \
             rm /tmp/bin/$BUGZILLA_FOLDER_NAME.tar.gz && \
-            rm -rf /tmp/bin && \
             mv /var/www/html/$BUGZILLA_FOLDER_NAME /var/www/html/bugzilla && \
             rm -rf /var/www/html/bugzilla/data && \
             ln -s /bugzilla/data /var/www/html/bugzilla/data && \
@@ -165,6 +170,33 @@ RUN         tar xzf /tmp/bin/$BUGZILLA_FOLDER_NAME.tar.gz -C /var/www/html && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/bugzilla/localconfig && \
             sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/bugzilla/localconfig && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/bugzilla/localconfig
+
+# Configure bayoteers
+RUN         tar xzf /tmp/bin/$BAYOTEERS_BAYOT_BASE_FOLDER_NAME.tar.gz -C /var/www/html/bugzilla/extensions && \
+            rm /tmp/bin/$BAYOTEERS_BAYOT_BASE_FOLDER_NAME.tar.gz && \
+            mv /var/www/html/bugzilla/extensions/$BAYOTEERS_BAYOT_BASE_FOLDER_NAME /var/www/html/bugzilla/extensions/BayotBase && \
+            cd /var/www/html/bugzilla && \
+            /usr/bin/perl checksetup.pl && \
+            tar xzf /tmp/bin/$BAYOTEERS_ACTIVITY_GRAPH_FOLDER_NAME.tar.gz -C /var/www/html/bugzilla/extensions && \
+            rm /tmp/bin/$BAYOTEERS_ACTIVITY_GRAPH_FOLDER_NAME.tar.gz && \
+            mv /var/www/html/bugzilla/extensions/$BAYOTEERS_ACTIVITY_GRAPH_FOLDER_NAME /var/www/html/bugzilla/extensions/ActivityGraph && \
+            tar xzf /tmp/bin/$BAYOTEERS_AGILE_TOOLS_FOLDER_NAME.tar.gz -C /var/www/html/bugzilla/extensions && \
+            rm /tmp/bin/$BAYOTEERS_AGILE_TOOLS_FOLDER_NAME.tar.gz && \
+            mv /var/www/html/bugzilla/extensions/$BAYOTEERS_AGILE_TOOLS_FOLDER_NAME /var/www/html/bugzilla/extensions/AgileTools && \
+            tar xzf /tmp/bin/$BAYOTEERS_BUG_VIEW_PLUS_FOLDER_NAME.tar.gz -C /var/www/html/bugzilla/extensions && \
+            rm /tmp/bin/$BAYOTEERS_BUG_VIEW_PLUS_FOLDER_NAME.tar.gz && \
+            mv /var/www/html/bugzilla/extensions/$BAYOTEERS_BUG_VIEW_PLUS_FOLDER_NAME /var/www/html/bugzilla/extensions/BugViewPlus && \
+            tar xzf /tmp/bin/$BAYOTEERS_FIELD_VISIBILITY_FOLDER_NAME.tar.gz -C /var/www/html/bugzilla/extensions && \
+            rm /tmp/bin/$BAYOTEERS_FIELD_VISIBILITY_FOLDER_NAME.tar.gz && \
+            mv /var/www/html/bugzilla/extensions/$BAYOTEERS_FIELD_VISIBILITY_FOLDER_NAME /var/www/html/bugzilla/extensions/FieldVisibility && \
+            tar xzf /tmp/bin/$BAYOTEERS_SEE_ALSO_PLUS_FOLDER_NAME.tar.gz -C /var/www/html/bugzilla/extensions && \
+            rm /tmp/bin/$BAYOTEERS_SEE_ALSO_PLUS_FOLDER_NAME.tar.gz && \
+            mv /var/www/html/bugzilla/extensions/$BAYOTEERS_SEE_ALSO_PLUS_FOLDER_NAME /var/www/html/bugzilla/extensions/SeeAlsoPlus && \
+            cd /var/www/html/bugzilla && \
+            /usr/bin/perl checksetup.pl
+
+# Remove bin folder
+RUN         rm -rf /tmp/bin
 
 # Configure helper scripts
 RUN         mv /tmp/containerConfig /bugzilla/scripts && \
