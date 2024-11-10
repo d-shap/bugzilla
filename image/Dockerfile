@@ -161,8 +161,8 @@ RUN         tar xzf /tmp/bin/$BUGZILLA_FOLDER_NAME.tar.gz -C /var/www/html && \
             sed -i "s|\$webservergroup.*|\$webservergroup = '"$RUN_GROUP"';|" /var/www/html/bugzilla/localconfig && \
             sed -i "s|\$db_name.*|\$db_name = '"$DB_NAME"';|" /var/www/html/bugzilla/localconfig && \
             sed -i "s|\$db_user.*|\$db_user = '"$DB_USER_NAME"';|" /var/www/html/bugzilla/localconfig && \
-            sed -i "s|\$db_driver.*|\$db_driver = 'mysql';|" /var/www/html/bugzilla/localconfig && \
-            sed -i "s|\$db_port.*|\$db_port = 3306;|" /var/www/html/bugzilla/localconfig && \
+            sed -i "s|\$db_driver.*|\$db_driver = 'mariadb';|" /var/www/html/bugzilla/localconfig && \
+            sed -i "s|\$db_port.*|\$db_port = 0;|" /var/www/html/bugzilla/localconfig && \
             sed -i "s|\$db_sock.*|\$db_sock = '/var/run/mysqld/mysqld.sock';|" /var/www/html/bugzilla/localconfig
 
 # Final configurations and clean-ups
