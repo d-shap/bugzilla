@@ -12,7 +12,7 @@ ENV         DEBIAN_FRONTEND=noninteractive \
             APACHE_RUN_GROUP="bugzilla" \
             DB_NAME="bugs" \
             DB_USER_NAME="bugs" \
-            BUGZILLA_FOLDER_NAME="bugzilla-5.0.6"
+            BUGZILLA_FOLDER_NAME="bugzilla-5.2"
 
 COPY        . /tmp
 
