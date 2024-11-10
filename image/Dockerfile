@@ -69,6 +69,8 @@ RUN         apt-get update && \
                 libdate-calc-perl \
                 libdatetime-perl \
                 libdatetime-timezone-perl \
+                libdbd-mysql-perl \
+                libdbd-pg-perl \
                 libdbi-perl \
                 libemail-address-perl \
                 libemail-mime-modifier-perl \
@@ -107,8 +109,7 @@ RUN         apt-get update && \
             apt-get install --assume-yes \
                 default-libmysqlclient-dev \
                 default-mysql-client \
-                default-mysql-server \
-                libdbd-mysql-perl && \
+                default-mysql-server && \
             apt-get clean && \
             sed -i '\|\[mysqld\]|a ft_min_word_len = 2' /etc/mysql/mariadb.conf.d/50-server.cnf && \
             sed -i 's|user.*|user            = '"$RUN_USER"'|' /etc/mysql/mariadb.conf.d/50-server.cnf && \
